@@ -2,23 +2,75 @@ package audiovisuales;
 
 import java.util.List;
 
+
+/**
+ * Clase abstracta que representa un contenido audiovisual, con informacion
+ * general como titulo, director, idioma, elenco, genero, duracion, vistas, países restringidos, etc.
+ * 
+ * @author Lucas, Francisco
+ * @version 1.0
+ */
+
 abstract class Audiovisual {
 		
-	String titulo;
-	String director;
-	String idioma;
-	String resumen;
-	String elenco;
-	String genero;
-	int duracion;
-	int vistasTotales;
-	double horasVistas;
-	List<String> paisesRestringidos;
+	 /** Titulo del audiovisual */
+    private String titulo;
+
+    /** Director del audiovisual */
+    private String director;
+
+    /** Idioma original del audiovisual */
+    private String idioma;
+
+    /** Un resumen del audiovisual */
+    private String resumen;
+
+    /** Actores principales */
+    private String elenco;
+
+    /** Genero del audiovisual (ej. drama, comedia, etc.) */
+    private String genero;
+
+    /** Duracion del audiovisual */
+    private int duracion;
+
+    /** Numero total de visualizaciones */
+    private int vistasTotales;
+
+    /** Total de horas vistas */
+    private double horasVistas;
+
+    /** Lista de paises donde el audiovisual esta restringido */
+    private List<String> paisesRestringidos;
+    
+    /** Lista de resenas del audiovisual */
 	//List<Resena> resena;
+    
+    /** Lista de subtitulos disponibles para el audiovisual */
 	//List<Subtitulo> subtitulos;
+    
+    /** Lista de doblajes disponibles para el audiovisual */
 	//List<Doblaje> doblajes;
+    
+    /** Lista de videos disponibles para el audiovisual */
 	//List<Video> videos
 
+    
+    /**
+     * Crea una nueva instancia de Audiovisual.
+     * 
+     * @param titulo titulo del audiovisual
+     * @param director director del audiovisual
+     * @param idioma idioma original
+     * @param resumen resumen del audiovisual
+     * @param elenco actores principales
+     * @param genero genero audiovisual
+     * @param duracion duracion del audiovisual
+     * @param vistasTotales numero total de visualizaciones
+     * @param horasVistas total de horas vistas
+     * @param paisesRestringidos lista de paises restringidos
+     * y faltan las 4 variables que estan comentadas 
+     */
 	public Audiovisual(String titulo, String director, String idioma, String resumen, String elenco, String genero,
 			int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos) {
 		super();
@@ -35,80 +87,195 @@ abstract class Audiovisual {
 	}
 
 
-	public List<String> getPaisesRestringidos() {
-		return paisesRestringidos;
-	}
-	public void setPaisesRestringidos(List<String> paisesRestringidos) {
-		this.paisesRestringidos = paisesRestringidos;
-	}
+	/**
+     * Devuelve la lista de paises donde esta restringido el audiovisual
+     * 
+     * @return lista de paises restringidos
+     */
+    public List<String> getPaisesRestringidos() {
+        return paisesRestringidos;
+    }
 
-	public String getTitulo() {
-		return titulo;
-	}
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
+    /**
+     * Establece la lista de paises restringidos
+     * 
+     * @param paisesRestringidos nueva lista de paises
+     */
+    public void setPaisesRestringidos(List<String> paisesRestringidos) {
+        this.paisesRestringidos = paisesRestringidos;
+    }
 
-	public String getDirector() {
-		return director;
-	}
-	public void setDirector(String director) {
-		this.director = director;
-	}
+    /**
+     * Devuelve el titulo del audiovisual
+     * 
+     * @return titulo
+     */
+    public String getTitulo() {
+        return titulo;
+    }
 
-	public String getIdioma() {
-		return idioma;
-	}
-	public void setIdioma(String idioma) {
-		this.idioma = idioma;
-	}
+    /**
+     * Establece el titulo del audiovisual
+     * 
+     * @param titulo nuevo titulo
+     */
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-	public String getResumen() {
-		return resumen;
-	}
-	public void setResumen(String resumen) {
-		this.resumen = resumen;
-	}
+    /**
+     * Devuelve el director del audiovisual
+     * 
+     * @return director
+     */
+    public String getDirector() {
+        return director;
+    }
 
-	public String getElenco() {
-		return elenco;
-	}
-	public void setElenco(String elenco) {
-		this.elenco = elenco;
-	}
+    /**
+     * Establece el director del audiovisual
+     * 
+     * @param director nuevo director
+     */
+    public void setDirector(String director) {
+        this.director = director;
+    }
 
-	public String getGenero() {
-		return genero;
-	}
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
+    /**
+     * Devuelve el idioma original
+     * 
+     * @return idioma
+     */
+    public String getIdioma() {
+        return idioma;
+    }
 
-	public int getDuracion() {
-		return duracion;
-	}
-	public void setDuracion(int duracion) {
-		this.duracion = duracion;
-	}
+    /**
+     * Establece el idioma original
+     * 
+     * @param idioma nuevo idioma
+     */
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
+    }
 
-	public int getVistasTotales() {
-		return vistasTotales;
-	}
-	public void setVistasTotales(int vistasTotales) {
-		this.vistasTotales = vistasTotales;
-	}
+    /**
+     * Devuelve el resumen del audiovisual
+     * 
+     * @return resumen
+     */
+    public String getResumen() {
+        return resumen;
+    }
 
-	public double getHorasVistas() {
-		return horasVistas;
-	}
-	public void setHorasVistas(double horasVistas) {
-		this.horasVistas = horasVistas;
-	}
+    /**
+     * Establece el resumen del audiovisual
+     * 
+     * @param resumen nuevo resumen
+     */
+    public void setResumen(String resumen) {
+        this.resumen = resumen;
+    }
 
-	public boolean permitido (String pais) {
-		boolean respuesta = false;
-		if (paisesRestringidos.contains(pais)) respuesta = true; 
-		return respuesta;
-	}
+    /**
+     * Devuelve el elenco de actores principales
+     * 
+     * @return elenco
+     */
+    public String getElenco() {
+        return elenco;
+    }
 
+    /**
+     * Establece el elenco de actores principales
+     * 
+     * @param elenco nuevo elenco
+     */
+    public void setElenco(String elenco) {
+        this.elenco = elenco;
+    }
+
+    /**
+     * Devuelve el genero del audiovisual
+     * 
+     * @return genero
+     */
+    public String getGenero() {
+        return genero;
+    }
+
+    /**
+     * Establece el genero del audiovisual
+     * 
+     * @param genero nuevo genero
+     */
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    /**
+     * Devuelve la duracion
+     * 
+     * @return duracion
+     */
+    public int getDuracion() {
+        return duracion;
+    }
+
+    /**
+     * Establece la duracion
+     * 
+     * @param duracion nueva duracion
+     */
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    /**
+     * Devuelve el numero total de visualizaciones
+     * 
+     * @return vistas totales
+     */
+    public int getVistasTotales() {
+        return vistasTotales;
+    }
+
+    /**
+     * Establece el numero total de visualizaciones
+     * 
+     * @param vistasTotales nuevo total de vistas
+     */
+    public void setVistasTotales(int vistasTotales) {
+        this.vistasTotales = vistasTotales;
+    }
+
+    /**
+     * Devuelve el total de horas vistas
+     * 
+     * @return horas vistas
+     */
+    public double getHorasVistas() {
+        return horasVistas;
+    }
+
+    /**
+     * Establece el total de horas vistas
+     * 
+     * @param horasVistas nuevo total de horas vistas
+     */
+    public void setHorasVistas(double horasVistas) {
+        this.horasVistas = horasVistas;
+    }
+
+    /**
+     * Indica si el audiovisual esta restringido en un pais dado
+     * 
+     * @param pais pais a consultar
+     * @return true si esta restringido, false si se permite
+     */
+    public boolean permitido(String pais) {
+        boolean respuesta = false;
+        if (paisesRestringidos.contains(pais)) respuesta = true; 
+        return respuesta;
+    }
 }

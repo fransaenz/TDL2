@@ -2,12 +2,44 @@ package audiovisuales;
 
 import java.util.List;
 
+/**
+ * Clase que representa una serie, que es un tipo de Audiovisual.
+ * Contiene información sobre la cantidad de temporadas, la lista de
+ * temporadas y un tráiler asociado.
+ * 
+ * @author Lucas, Francisco
+ * @version 1.0
+ */
+
 class Serie extends Audiovisual{
 	
-	int cantTemporadas;
-	List <Temporada> temporadas;
-	Trailer trailer;
-	
+	 /** Cantidad de temporadas de la serie */
+    private int cantTemporadas;
+
+    /** Lista de temporadas de la serie */
+    private List<Temporada> temporadas;
+
+    /** Tráiler asociado a la serie */
+    private Trailer trailer;
+
+    /**
+     * Crea una nueva instancia de Serie.
+     * 
+     * @param titulo título de la serie
+     * @param director director de la serie
+     * @param idioma idioma original
+     * @param resumen breve sinopsis
+     * @param elenco actores principales
+     * @param genero género audiovisual
+     * @param duracion duración de la serie, valor total
+     * @param vistasTotales número total de visualizaciones
+     * @param horasVistas total de horas vistas
+     * @param paisesRestringidos lista de países donde la serie está restringida
+     * @param cantTemporadas cantidad de temporadas de la serie
+     * @param temporadas lista de objetos Temporada que componen la serie
+     * @param trailer tráiler promocional asociado
+     */
+    
 	public Serie(String titulo, String director, String idioma, String resumen, String elenco, String genero,
 			int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos, int cantTemporadas,
 			List<Temporada> temporadas, Trailer trailer) {
@@ -18,28 +50,65 @@ class Serie extends Audiovisual{
 		this.trailer = trailer;
 	}
 
-	public int getCantTemporadas() {
-		return cantTemporadas;
-	}
+	/**
+     * Devuelve la cantidad de temporadas de la serie
+     * 
+     * @return número de temporadas
+     */
+    public int getCantTemporadas() {
+        return cantTemporadas;
+    }
 
-	public void setCantTemporadas(int cantTemporadas) {
-		this.cantTemporadas = cantTemporadas;
-	}
+    /**
+     * Establece la cantidad de temporadas de la serie
+     * 
+     * @param cantTemporadas nueva cantidad de temporadas
+     */
+    public void setCantTemporadas(int cantTemporadas) {
+        this.cantTemporadas = cantTemporadas;
+    }
 
-	public List<Temporada> getTemporadas() {
-		return temporadas;
-	}
+    /**
+     * Devuelve la lista de temporadas de la serie
+     * 
+     * @return lista de temporadas
+     */
+    public List<Temporada> getTemporadas() {
+        return temporadas;
+    }
 
-	public void setTemporadas(List<Temporada> temporadas) {
-		this.temporadas = temporadas;
-	}
+    /**
+     * Establece la lista de temporadas de la serie
+     * 
+     * @param temporadas nueva lista de temporadas
+     */
+    public void setTemporadas(List<Temporada> temporadas) {
+        this.temporadas = temporadas;
+    }
 
-	public Trailer getTrailer() {
-		return trailer;
-	}
+    /**
+     * Devuelve el tráiler de la serie
+     * 
+     * @return tráiler asociado
+     */
+    public Trailer getTrailer() {
+        return trailer;
+    }
 
-	public void setTrailer(Trailer trailer) {
-		this.trailer = trailer;
-	}
+    /**
+     * Establece el tráiler de la serie
+     * 
+     * @param trailer nuevo tráiler a asociar
+     */
+    public void setTrailer(Trailer trailer) {
+        this.trailer = trailer;
+    }
 
+	/**
+     * Establece el tráiler de la serie
+     * 
+     */
+    //public void agregarTrailer(String titulo, String director, String idioma, String resumen, String elenco, String genero, int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos){}
+    
+	
 }
