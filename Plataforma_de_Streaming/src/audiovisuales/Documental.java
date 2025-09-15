@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 
-class Documental extends Audiovisual{
+public class Documental extends Audiovisual{
 	
 	 /** Documental que sirve como precuela de este */
     private Documental precuela;

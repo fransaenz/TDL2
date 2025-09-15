@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 
-abstract class Audiovisual {
+public abstract class Audiovisual {
 		
 	 /** Titulo del audiovisual */
     private String titulo;

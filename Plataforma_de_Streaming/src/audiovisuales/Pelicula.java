@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 
-class Pelicula extends Audiovisual{
+public class Pelicula extends Audiovisual{
 	
 	 /** Pelicula que sirve como precuela de este */
 	Pelicula precuela;

@@ -4,26 +4,22 @@ Se accede a la clase Registro para crear un Usuario y poder utilizarlo. La perso
 
 
 Pseudocódigo:
-Se supone que la inicialización de las clases Registro, Reproductor y Catalogo (Catalogo usando varias clases Audiovisuales) ya fue hecha.
+Se supone que la inicialización de las clases Registro, Reproductor y 
+Catalogo (Catalogo usando varias clases Audiovisuales) ya fue hecha.
+
 Registro agrega un nuevo Usuario asociado a una Persona
 Registro abre el Perfil del Usuario con sus credenciales
-usuario = registro.abrirUsuario();
 Usuario solicita ver el Catálogo
-usuario.verCatalogo(catalogo);
 Usuario selecciona un Audiovisual del Catálogo
-audiovisual = usuario.elegirQueMirar();
 Usuario envía el Audiovisual al Reproductor
 Reproductor carga el Audiovisual seleccionado
-mandarAReproductor(audiovisual);
 Reproductor inicia la reproducción del Audiovisual
 Mientras el Reproductor esté reproduciendo, se mantiene la visualización
 Al finalizar la reproducción, se detecta el evento de fin
-reproductor.play();
-Usuario crea una nueva Reseña y le asigna una puntuación y un texto
-A Usuario se le asocia la Reseña
-new Resena resena = usuario.crearResena();
-Usuario agrega la Reseña al Audiovisual
-El Audiovisual almacena la nueva Reseña en su lista de reseñas
-usuario.agregarResena(audiovisual, resena);
+Si el usuario quiere hacer una reseña
+	Usuario crea una nueva Reseña y le asigna una puntuación y un texto
+	A Usuario se le asocia la Reseña
+	Usuario agrega la Reseña al Audiovisual
+	El Audiovisual almacena la nueva Reseña en su lista de reseñas
 Usuario actualiza su historial con el Audiovisual visto
 Fin del proceso

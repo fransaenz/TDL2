@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 
-class Temporada extends Audiovisual{
+public class Temporada extends Audiovisual{
 	
 	/** Cantidad de capítulos en la temporada */
     private int cantCapitulos;

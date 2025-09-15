@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 
-class Trailer extends Audiovisual {
+public class Trailer extends Audiovisual {
 
 	/**
      * Crea una nueva instancia de Trailer.

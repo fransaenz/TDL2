@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 
-class Serie extends Audiovisual{
+public class Serie extends Audiovisual{
 	
 	 /** Cantidad de temporadas de la serie */
     private int cantTemporadas;

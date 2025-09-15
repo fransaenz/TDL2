@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 
-class Capitulo extends Audiovisual {
+public class Capitulo extends Audiovisual {
 	
 	  /** Trailer asociado al capitulo */
 	Trailer trailer;
