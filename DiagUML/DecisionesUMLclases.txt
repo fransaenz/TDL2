@@ -1,0 +1,18 @@
+Decisiones el Diagrama de Clases UML
+
+
+Una persona puede tener un solo usuario.
+ 
+Planteamos como un Audiovisual tanto a la Serie como a Temporada ya que, aunque no se pueden reproducir, comparten todos los atributos de Audiovisual. 
+
+Decidimos que tanto Documental como Película tengan como variables a su precuela y secuela ya que en el caso de querer hacer una lista de alguna saga o de partes relacionadas, sea más fácil de realizar. 
+
+Recomendador tiene como variable Usuario para poder acceder a su historial y también accede al Catálogo para crear las listas de recomendación, aunque como no tiene un atributo Catálogo no lo señalamos con flecha.
+
+Creamos un método abstracto Reporte para conectar los tres tipos de reportes que hay para poder, en caso de ser necesario, hacer una lista general de estos. Además planteamos el método abstracto reportar() que será diferente en cada caso. 
+
+Pusimos que la persona y el usuario tengan su propia variable país ya que una persona puede ser de un lugar y el usuario puede crearse en otro. 
+
+No indicamos con flechas la relacion entre Persona y Perfil, ya que la clase Registro se encarga de la logistica que hace que una persona tenga un perfil, pero no lo definimos a ese perfil como un atributo de la persona.
+
+un Audiovisual puede tener distintos doblajes, subtitulos y/o videos (dependiendo de la calidad del mismo) por lo que decidimos que el Audiovisual tenga una lista de estos objetos
