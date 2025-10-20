@@ -1,6 +1,8 @@
 package audiovisuales;
 
 import java.util.List;
+import java.time.Duration;
+import util.*;
 
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
  * general como titulo, director, idioma, elenco, genero, duracion, vistas, países restringidos, etc.
  * 
  * @author Lucas, Francisco
- * @version 1.0
+ * @version 2.0+
  */
 
 public abstract class Audiovisual {
@@ -20,7 +22,7 @@ public abstract class Audiovisual {
     private String director;
 
     /** Idioma original del audiovisual */
-    private String idioma;
+    private Idioma idioma;
 
     /** Un resumen del audiovisual */
     private String resumen;
@@ -29,22 +31,22 @@ public abstract class Audiovisual {
     private String elenco;
 
     /** Genero del audiovisual (ej. drama, comedia, etc.) */
-    private String genero;
+    private Genero genero;
 
     /** Duracion del audiovisual */
-    private int duracion;
+    private Duration duracion;
 
     /** Numero total de visualizaciones */
     private int vistasTotales;
 
     /** Total de horas vistas */
-    private double horasVistas;
+    private Duration horasVistas;
 
     /** Lista de paises donde el audiovisual esta restringido */
-    private List<String> paisesRestringidos;
+    private List<Pais> paisesRestringidos;
     
     /** Lista de resenas del audiovisual */
-	//List<Resena> resena;
+	List<Resena> resenas;
     
     /** Lista de subtitulos disponibles para el audiovisual */
 	//List<Subtitulo> subtitulos;
@@ -61,18 +63,18 @@ public abstract class Audiovisual {
      * 
      * @param titulo titulo del audiovisual
      * @param director director del audiovisual
-     * @param idioma idioma original
+     * @param Idioma idioma original
      * @param resumen resumen del audiovisual
      * @param elenco actores principales
-     * @param genero genero audiovisual
+     * @param Genero genero audiovisual
      * @param duracion duracion del audiovisual
      * @param vistasTotales numero total de visualizaciones
      * @param horasVistas total de horas vistas
      * @param paisesRestringidos lista de paises restringidos
      * y faltan las 4 variables que estan comentadas 
      */
-	public Audiovisual(String titulo, String director, String idioma, String resumen, String elenco, String genero,
-			int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos) {
+	public Audiovisual(String titulo, String director, Idioma idioma, String resumen, String elenco, Genero genero,
+			Duration duracion, int vistasTotales, Duration horasVistas, List<Pais> paisesRestringidos) {
 		super();
 		this.titulo = titulo;
 		this.director = director;
@@ -84,6 +86,7 @@ public abstract class Audiovisual {
 		this.vistasTotales = vistasTotales;
 		this.horasVistas = horasVistas;
 		this.paisesRestringidos = paisesRestringidos; 
+		this.resenas = null;
 	}
 
 
@@ -92,7 +95,7 @@ public abstract class Audiovisual {
      * 
      * @return lista de paises restringidos
      */
-    public List<String> getPaisesRestringidos() {
+    public List<Pais> getPaisesRestringidos() {
         return paisesRestringidos;
     }
 
@@ -101,7 +104,7 @@ public abstract class Audiovisual {
      * 
      * @param paisesRestringidos nueva lista de paises
      */
-    public void setPaisesRestringidos(List<String> paisesRestringidos) {
+    public void setPaisesRestringidos(List<Pais> paisesRestringidos) {
         this.paisesRestringidos = paisesRestringidos;
     }
 
@@ -146,7 +149,7 @@ public abstract class Audiovisual {
      * 
      * @return idioma
      */
-    public String getIdioma() {
+    public Idioma getIdioma() {
         return idioma;
     }
 
@@ -155,7 +158,7 @@ public abstract class Audiovisual {
      * 
      * @param idioma nuevo idioma
      */
-    public void setIdioma(String idioma) {
+    public void setIdioma(Idioma idioma) {
         this.idioma = idioma;
     }
 
@@ -200,7 +203,7 @@ public abstract class Audiovisual {
      * 
      * @return genero
      */
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
@@ -209,7 +212,7 @@ public abstract class Audiovisual {
      * 
      * @param genero nuevo genero
      */
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
@@ -218,7 +221,7 @@ public abstract class Audiovisual {
      * 
      * @return duracion
      */
-    public int getDuracion() {
+    public Duration getDuracion() {
         return duracion;
     }
 
@@ -227,7 +230,7 @@ public abstract class Audiovisual {
      * 
      * @param duracion nueva duracion
      */
-    public void setDuracion(int duracion) {
+    public void setDuracion(Duration duracion) {
         this.duracion = duracion;
     }
 
@@ -254,7 +257,7 @@ public abstract class Audiovisual {
      * 
      * @return horas vistas
      */
-    public double getHorasVistas() {
+    public Duration getHorasVistas() {
         return horasVistas;
     }
 
@@ -263,7 +266,7 @@ public abstract class Audiovisual {
      * 
      * @param horasVistas nuevo total de horas vistas
      */
-    public void setHorasVistas(double horasVistas) {
+    public void setHorasVistas(Duration horasVistas) {
         this.horasVistas = horasVistas;
     }
 
@@ -273,9 +276,36 @@ public abstract class Audiovisual {
      * @param pais pais a consultar
      * @return true si esta restringido, false si se permite
      */
-    public boolean permitido(String pais) {
+    public boolean permitido(Pais pais) {
         boolean respuesta = false;
         if (paisesRestringidos.contains(pais)) respuesta = true; 
         return respuesta;
     }
+    
+    /**
+     * Agrega una resenia a la lista de resenias del Audiovisual
+     * 
+     * @param resenia es la resenia que se quiere sumar a la lista
+     */
+    public void sumarResena(Resena resenia) {
+    	resenas.add(resenia);
+    }
+
+    /**
+     * Devuelve la lista de resenias del audiovisual
+     * 
+     * @return lista de resenias
+     */
+	public List<Resena> getResenas() {
+		return resenas;
+	}
+
+	/**
+     * Establece la lista de resenias
+     * 
+     * @param resenas nueva lista de resenias
+     */
+	public void setResenas(List<Resena> resenas) {
+		this.resenas = resenas;
+	}
 }

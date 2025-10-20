@@ -1,6 +1,8 @@
 package audiovisuales;
 
 import java.util.List;
+import java.time.Duration;
+import util.*;
 
 /**
  * Clase que representa una serie, que es un tipo de Audiovisual.
@@ -8,7 +10,7 @@ import java.util.List;
  * temporadas y un tráiler asociado.
  * 
  * @author Lucas, Francisco
- * @version 1.0
+ * @version 2.0
  */
 
 public class Serie extends Audiovisual{
@@ -40,8 +42,8 @@ public class Serie extends Audiovisual{
      * @param trailer tráiler promocional asociado
      */
     
-	public Serie(String titulo, String director, String idioma, String resumen, String elenco, String genero,
-			int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos, int cantTemporadas,
+	public Serie(String titulo, String director, Idioma idioma, String resumen, String elenco, Genero genero,
+			Duration duracion, int vistasTotales, Duration horasVistas, List<Pais> paisesRestringidos, int cantTemporadas,
 			List<Temporada> temporadas, Trailer trailer) {
 		super(titulo, director, idioma, resumen, elenco, genero, duracion, vistasTotales, horasVistas,
 				paisesRestringidos);
@@ -104,11 +106,5 @@ public class Serie extends Audiovisual{
         this.trailer = trailer;
     }
 
-	/**
-     * Establece el tráiler de la serie
-     * 
-     */
-    //public void agregarTrailer(String titulo, String director, String idioma, String resumen, String elenco, String genero, int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos){}
-    
-	
+
 }

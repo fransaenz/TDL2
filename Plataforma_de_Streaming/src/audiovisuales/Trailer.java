@@ -1,14 +1,16 @@
 package audiovisuales;
 
 import java.util.List;
+import java.time.Duration;
+import util.*;
 
 /**
  * Clase que representa un tráiler, que es un tipo de Audiovisual.
  * Hereda todos los atributos de Audiovisual como título, director,
  * idioma, resumen, elenco, género, duración, vistas y países restringidos.
  * 
- * @author Francisco, Lucas
- * @version 1.0
+ * @author Lucas, Francisco
+ * @version 2.0
  */
 
 public class Trailer extends Audiovisual {
@@ -28,8 +30,8 @@ public class Trailer extends Audiovisual {
      * @param paisesRestringidos lista de países donde el tráiler está restringido
      */
 	
-	public Trailer(String titulo, String director, String idioma, String resumen, String elenco, String genero,
-			int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos) {
+	public Trailer(String titulo, String director, Idioma idioma, String resumen, String elenco, Genero genero,
+			Duration duracion, int vistasTotales, Duration horasVistas, List<Pais> paisesRestringidos) {
 		super(titulo, director, idioma, resumen, elenco, genero, duracion, vistasTotales, horasVistas, paisesRestringidos);
 	}
 	

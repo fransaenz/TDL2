@@ -1,14 +1,15 @@
 package audiovisuales;
 
 import java.util.List;
-
+import java.time.Duration;
+import util.*;
 
 /**
  * Clase que representa una pelicula, que es un tipo de Audiovisual.
  * Puede tener una pelicula precuela, una secuela y un tráiler asociado.
  * 
- * @author Francisco, Lucas 
- * @version 1.0
+ * @author Lucas, Francisco
+ * @version 2.0
  */
 
 
@@ -20,7 +21,13 @@ public class Pelicula extends Audiovisual{
 	Pelicula secuela;
     /** Tráiler asociado a la pelicula */
 	Trailer trailer;
-	
+	/** Lista de todas las precuelas de la Pelicula */
+    private List<Pelicula> ListaPrecuelas;
+    
+    /** Lista de todas las secuelas de la Pelicula */
+    private List<Pelicula> ListaSecuelas;
+
+    
 	 /**
      * Crea una nueva instancia de Pelicula.
      * 
@@ -38,16 +45,45 @@ public class Pelicula extends Audiovisual{
      * @param secuela película que sirve como secuela (puede ser null)
      * @param trailer tráiler promocional asociado
      */
-	public Pelicula(String titulo, String director, String idioma, String resumen, String elenco, String genero,
-			int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos, Pelicula precuela,
+	public Pelicula(String titulo, String director, Idioma idioma, String resumen, String elenco, Genero genero,
+			Duration duracion, int vistasTotales, Duration horasVistas, List<Pais> paisesRestringidos, Pelicula precuela,
 			Pelicula secuela, Trailer trailer) {
 		super(titulo, director, idioma, resumen, elenco, genero, duracion, vistasTotales, horasVistas,
 				paisesRestringidos);
 		this.precuela = precuela;
+		if (precuela != null) {
+			ListaPrecuelas.add(precuela);
+		}
 		this.secuela = secuela;
+		if (secuela != null) {
+			ListaSecuelas.add(secuela);
+		}
 		this.trailer = trailer;
 	}
 
+	/**
+     * Crea una nueva instancia de Pelicula, sin precuela ni secuela ni trailer.
+     * 
+     * @param titulo título de la película
+     * @param director director de la película
+     * @param idioma idioma original
+     * @param resumen breve sinopsis
+     * @param elenco actores principales
+     * @param genero género audiovisual
+     * @param duracion duración de la pelicula
+     * @param vistasTotales número total de visualizaciones
+     * @param horasVistas total de horas vistas
+     * @param paisesRestringidos lista de países donde la película está restringida
+     */
+	public Pelicula(String titulo, String director, Idioma idioma, String resumen, String elenco, Genero genero,
+			Duration duracion, int vistasTotales, Duration horasVistas, List<Pais> paisesRestringidos) {
+		super(titulo, director, idioma, resumen, elenco, genero, duracion, vistasTotales, horasVistas,
+				paisesRestringidos);
+	}
+	
+	
+	
+	
 	 /**
      * Devuelve la precuela de esta película
      * 
@@ -103,22 +139,21 @@ public class Pelicula extends Audiovisual{
     }
 
 
-    /**
-     * Establece el tráiler de la pelicula
-     * 
-     */
-    //public void agregarTrailer(String titulo, String director, String idioma, String resumen, String elenco, String genero, int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos){}
-    
+
     /**
      * Establece una precuela de la pelicula
      * 
      */
-    //public void agregarPrecuela(String titulo, String director, String idioma, String resumen, String elenco, String genero, int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos){}
-   
+
+    public void AgregarPrecuela(Pelicula pre) {
+    		ListaPrecuelas.add(pre);
+    }
+    
     /**
      * Establece una secuela de la pelicula
      * 
      */
-    //public void agregarSecuela(String titulo, String director, String idioma, String resumen, String elenco, String genero, int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos){}
-
+    public void AgregarSecuela(Pelicula se) {
+    	ListaSecuelas.add(se);
+    }
 }
