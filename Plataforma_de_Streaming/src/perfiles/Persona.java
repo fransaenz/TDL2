@@ -58,6 +58,14 @@ public class Persona {
 
 	public void setNroTarjeta(int nroTarjeta) {
 		this.nroTarjeta = nroTarjeta;
+	}
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	};
 	
 	

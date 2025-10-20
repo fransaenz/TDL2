@@ -3,7 +3,6 @@ package perfiles;
 public abstract class Perfil {
 
 	public Perfil(String email, String contrasena, String nombreUsuario) {
-		super();
 		this.email = email;
 		this.contrasena = contrasena;
 		this.nombreUsuario = nombreUsuario;
