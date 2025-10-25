@@ -51,6 +51,7 @@ public class Usuario extends Perfil {
 	    misResenas.addLast(res);
 	}
 	
+	/*
 	public void crearLista(String titulo) {
 		String t = titulo;
 		List<Audiovisual> t = new LinkedList<Audiovisual>();
@@ -68,7 +69,7 @@ public class Usuario extends Perfil {
 	public void eliminarPosicion(int pos, List<Audiovisual> lista){
 		lista.remove(pos);
 	}
-	
+	*/
 	
 	
 	/*public void verCatalogo(Catalogo c) {

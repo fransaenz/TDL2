@@ -99,11 +99,12 @@ public class Resena {
 	 public String toString() {
 		 String autorStr = (autor != null) ? autor.getNombreUsuario() : "Anónimo";
 		 String fechaStr = this.fechaHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-		 return String.format("%s - %d★\n%s\n(autor: %s) (aprobada: %s)",
+		 return String.format("%s - %d★\n%s\n(autor: %s) (fecha: %s) (aprobada: %s)",
 	                contenidoResenado.getTitulo(),
 	                estrellas,
 	                texto.isEmpty() ? "(sin comentario)" : texto,
 	                autorStr,
+	                fechaStr,
 	                aprobada ? "sí" : "no");
 	 }
 	 

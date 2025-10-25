@@ -1,7 +1,8 @@
 package audiovisuales;
 
 import java.util.List;
-
+import java.time.Duration;
+import util.*;
 
 /**
  * Representa un capitulo audiovisual que extiende de Audiovisual
@@ -33,8 +34,8 @@ public class Capitulo extends Audiovisual {
      * @param trailer trailer del capitulo
      */
 	
-	public Capitulo(String titulo, String director, String idioma, String resumen, String elenco, String genero,
-			int duracion, int vistasTotales, double horasVistas, List<String> paisesRestringidos, Trailer trailer) {
+	public Capitulo(String titulo, String director, Idioma idioma, String resumen, String elenco, Genero genero,
+			Duration duracion, int vistasTotales, Duration horasVistas, List<Pais> paisesRestringidos, Trailer trailer) {
 		super(titulo, director, idioma, resumen, elenco, genero, duracion, vistasTotales, horasVistas,
 				paisesRestringidos);
 		this.trailer = trailer;

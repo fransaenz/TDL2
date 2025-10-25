@@ -1,5 +1,6 @@
 package audiovisuales;
 
+import resenas.Resena;
 import java.util.List;
 import java.time.Duration;
 import util.*;
