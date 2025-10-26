@@ -53,11 +53,26 @@ public class Apli {
 	}
 	
 	private void metodoDos(Scanner scanner) {
-		
+		//mostrar listado de personas guardadas en el sistema
+		System.out.println("Ingrese el email");
+		String email = scanner.nextLine();
+		System.out.println("Ingrese la contrasena");
+		String contrasena = scanner.nextLine();
+		System.out.println("Ingrese el nombre de usuario");
+		String nombreUsuario = scanner.nextLine();
+		// y con los enum?
 	}
 	
 	private void metodoTres(Scanner scanner) {
-	
+		System.out.println("Ingrese el titulo de la pelicula");
+		String titulo = scanner.nextLine();
+		System.out.println("Ingrese el director de la pelicula ");
+		String director = scanner.nextLine();
+		System.out.println("Ingrese el elenco de la pelicula");
+		String elenco = scanner.nextLine();
+		System.out.println("Ingrese la duracion de la pelicula");
+		String duracion = scanner.nextLine();
+		//y los demas datos?
 	}
 	
 	private void metodoCuatro(Scanner scanner) {

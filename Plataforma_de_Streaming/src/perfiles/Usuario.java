@@ -25,9 +25,6 @@ public class Usuario extends Perfil {
 	
 	
 	
-	private enum Preferencias{COMEDIA, SUSPENSO, TERROR, DRAMA, ACCION, CIENCIA_FICCION };
-	
-	
 	/*private List<VistoHasta> continuarViendo;*/
 	
 	private List<Audiovisual> favoritos;

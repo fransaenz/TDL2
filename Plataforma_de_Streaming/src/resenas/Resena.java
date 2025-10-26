@@ -6,9 +6,13 @@ import perfiles.Usuario;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 
-
+/**
+ * Representa una reseña hecha por un usuario sobre un Audiovisual.
+ * Contiene validaciones básicas (estrellas entre 1 y 5), autor, fecha y estado de aprobación.
+ */
 public class Resena {
 	
 	
@@ -108,5 +112,21 @@ public class Resena {
 	                aprobada ? "sí" : "no");
 	 }
 	 
+	 @Override
+	 public boolean equals(Object o) {
+	     if (this == o) return true;
+	     if (!(o instanceof Resena)) return false;
+	     Resena resena = (Resena) o;
+	     return (this.estrellas == resena.estrellas) 
+	    	 && (this.contenidoResenado == resena.contenidoResenado)
+	         && (this.autor == resena.autor)
+	         && (this.texto == resena.texto)
+	         && (this.fechaHora == resena.fechaHora);
+	 }
+	 
+	 @Override
+	 public int hashCode() {
+		 return Objects.hash(contenidoResenado, autor, estrellas, texto, fechaHora);
+	 }
 	 
 }
