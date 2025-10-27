@@ -1,9 +1,10 @@
 package daos;
 
-public class PeliculaDAO {
+import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
+import audiovisuales.Pelicula;
 
-	public PeliculaDAO() {
-		// TODO Auto-generated constructor stub
-	}
+public class PeliculaDAO {
 
 }
