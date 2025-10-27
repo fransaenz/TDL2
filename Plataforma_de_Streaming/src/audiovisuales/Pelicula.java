@@ -67,7 +67,6 @@ public class Pelicula extends Audiovisual{
      * @param titulo título de la película
      * @param director director de la película
      * @param idioma idioma original
-     * @param resumen breve sinopsis
      * @param elenco actores principales
      * @param genero género audiovisual
      * @param duracion duración de la pelicula
@@ -75,13 +74,17 @@ public class Pelicula extends Audiovisual{
      * @param horasVistas total de horas vistas
      * @param paisesRestringidos lista de países donde la película está restringida
      */
-	public Pelicula(String titulo, String director, Idioma idioma, String resumen, String elenco, Genero genero,
-			Duration duracion, int vistasTotales, Duration horasVistas, List<Pais> paisesRestringidos) {
-		super(titulo, director, idioma, resumen, elenco, genero, duracion, vistasTotales, horasVistas,
-				paisesRestringidos);
+	public Pelicula(String titulo, String director, Idioma idioma, String elenco, Genero genero,
+			Duration duracion, List<Pais> paisesRestringidos) {
+		super(titulo, director, idioma, elenco, genero, duracion, paisesRestringidos);
+		
 	}
 	
-	
+	public Pelicula(String titulo, String director, String elenco, Genero genero,
+			Duration duracion, String resumen) {
+		super(titulo, director, elenco, genero, duracion, resumen);
+		
+	}
 	
 	
 	 /**
