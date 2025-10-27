@@ -3,13 +3,22 @@ package perfiles;
 public class Persona {
 
 
-	public Persona(String nombre, String apellido, String dni, int nroTarjeta, Perfil perfil) {
+	public Persona(String nombre, String apellido, int dni, int nroTarjeta, Perfil perfil) {
 		super();
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.nroTarjeta = nroTarjeta;
 		this.perfil = perfil;
+	}
+	
+	public Persona(String nombre, String apellido, int dni, int nroTarjeta) {
+		super();
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.dni = dni;
+		this.nroTarjeta = nroTarjeta;
+		this.perfil = null;
 	}
 
 	
@@ -18,11 +27,9 @@ public class Persona {
 	
 	private String apellido;
 	
-	private String dni;
+	private int dni;
 	
 	private int nroTarjeta;
-	
-	private enum Pais {ARGENTINA, BRASIL, URUGUAY}
 	
 	private Perfil perfil;
 
@@ -44,11 +51,11 @@ public class Persona {
 		this.apellido = apellido;
 	}
 
-	public String getDni() {
+	public int getDni() {
 		return dni;
 	}
 
-	public void setDni(String dni) {
+	public void setDni(int dni) {
 		this.dni = dni;
 	}
 
@@ -66,6 +73,11 @@ public class Persona {
 
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
+	}
+
+	public String toString() {
+		return "Persona [nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni + ", nroTarjeta=" + nroTarjeta
+				+ "]";
 	};
 	
 	

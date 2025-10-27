@@ -2,6 +2,7 @@ package perfiles;
 
 public abstract class Perfil {
 
+
 	public Perfil(String email, String contrasena, String nombreUsuario) {
 		this.email = email;
 		this.contrasena = contrasena;
@@ -41,5 +42,10 @@ public abstract class Perfil {
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
 	}
-	
+
+
+	@Override
+	public String toString() {
+		return "Datos del perfil: email=" + email + ", contrasena=" + contrasena + ", nombreUsuario=" + nombreUsuario;
+	}
 }

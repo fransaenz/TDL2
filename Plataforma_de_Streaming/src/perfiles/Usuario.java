@@ -6,37 +6,98 @@ import resenas.Resena;
 
 import java.util.List;
 import java.util.LinkedList;
-
+import util.*;
+import java.util.Comparator;
 
 
 public class Usuario extends Perfil {
 	
+	/*private List<VistoHasta> continuarViendo;*/
 	
+	//private List<Audiovisual> favoritos;
 	
+	//private List<Audiovisual> historial;
+	
+	private List<Resena> misResenas;
+	
+	private Pais pais;
+	private Genero preferencia;
+	private Idioma idioma;
+	
+	/*private Plan plan*/
+	
+	/*
 	public Usuario(String email, String contrasena, String nombreUsuario) {
 		super(email, contrasena, nombreUsuario);
 		this.favoritos = null;
 		this.historial = null; 
 		this.misResenas = null;
-		this.favoritos = new LinkedList<Audiovisual>();
-		this.historial = new LinkedList<Audiovisual>();
-		this.misResenas = new LinkedList<Resena>();
+	}
+	*/
+	public Usuario(String email, String contrasena, String nombreUsuario) {
+		super(email, contrasena, nombreUsuario);
+		this.misResenas = null;
 	}
 	
 	
 	
-	/*private List<VistoHasta> continuarViendo;*/
 	
-	private List<Audiovisual> favoritos;
-	
-	private List<Audiovisual> historial;
-	
-	private List<Resena> misResenas;
-	
-	/*private Plan plan*/
-	
-	
-	
+	public List<Resena> getMisResenas() {
+		return misResenas;
+	}
+
+
+
+
+	public void setMisResenas(List<Resena> misResenas) {
+		this.misResenas = misResenas;
+	}
+
+
+
+
+	public Pais getPais() {
+		return pais;
+	}
+
+
+
+
+	public void setPais(Pais pais) {
+		this.pais = pais;
+	}
+
+
+
+
+	public Genero getPreferencia() {
+		return preferencia;
+	}
+
+
+
+
+	public void setPreferencia(Genero preferencia) {
+		this.preferencia = preferencia;
+	}
+
+
+
+
+	public Idioma getIdioma() {
+		return idioma;
+	}
+
+
+
+
+	public void setIdioma(Idioma idioma) {
+		this.idioma = idioma;
+	}
+
+
+
+
 	public Resena crearResena(Audiovisual av, int estrellas, String texto) {
 		if (av == null) throw new IllegalArgumentException("Seleccione un audiovisual válido.");
 	    Resena res = new Resena(av,this,estrellas,texto);
@@ -82,4 +143,10 @@ public class Usuario extends Perfil {
 	}
 	*/
 	
+	
+	@Override
+	public String toString() {
+		return "Datos del usuario pais=" + pais + ", preferencia=" + preferencia + ", idioma=" + idioma + " y los " + super.toString();
+	}
+   
 }

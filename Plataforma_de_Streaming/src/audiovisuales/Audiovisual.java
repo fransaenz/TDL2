@@ -90,6 +90,31 @@ public abstract class Audiovisual {
 		this.resenas = null;
 	}
 
+	
+	public Audiovisual(String titulo, String director, String elenco, Genero genero,
+			Duration duracion, String resumen) {
+		super();
+		this.titulo = titulo;
+		this.director = director;
+		this.elenco = elenco;
+		this.genero = genero;
+		this.duracion = duracion;
+		this.resumen = resumen; 
+		this.resenas = null;
+	}
+	
+	public Audiovisual(String titulo, String director, Idioma idioma, String elenco, Genero genero,
+			Duration duracion, List<Pais> paisesRestringidos) {
+		super();
+		this.titulo = titulo;
+		this.director = director;
+		this.idioma = idioma;
+		this.elenco = elenco;
+		this.genero = genero;
+		this.duracion = duracion;
+		this.paisesRestringidos = paisesRestringidos; 
+		this.resenas = null;
+	}
 
 	/**
      * Devuelve la lista de paises donde esta restringido el audiovisual
