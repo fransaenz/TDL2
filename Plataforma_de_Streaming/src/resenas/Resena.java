@@ -39,6 +39,8 @@ public class Resena {
 	private boolean aprobada;
 	
 	private LocalDateTime fechaHora;
+
+	
 	
 	/*getters setters*/
 	

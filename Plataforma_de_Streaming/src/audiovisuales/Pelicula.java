@@ -15,6 +15,8 @@ import util.*;
 
 public class Pelicula extends Audiovisual{
 	
+	private int id;
+	
 	 /** Pelicula que sirve como precuela de este */
 	Pelicula precuela;
 	 /** Pelicula que sirve como secuela de este */
@@ -86,13 +88,22 @@ public class Pelicula extends Audiovisual{
 		
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}	
+	
 	
 	 /**
      * Devuelve la precuela de esta película
      * 
      * @return película precuela, o null si no tiene
      */
-    public Pelicula getPrecuela() {
+    
+	public Pelicula getPrecuela() {
         return precuela;
     }
 

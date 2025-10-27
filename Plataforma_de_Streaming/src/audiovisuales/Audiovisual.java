@@ -16,6 +16,8 @@ import util.*;
 
 public abstract class Audiovisual {
 		
+	private int id;
+	
 	 /** Titulo del audiovisual */
     private String titulo;
 
@@ -115,6 +117,16 @@ public abstract class Audiovisual {
 		this.paisesRestringidos = paisesRestringidos; 
 		this.resenas = null;
 	}
+
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 
 	/**
      * Devuelve la lista de paises donde esta restringido el audiovisual

@@ -12,6 +12,9 @@ import java.util.Comparator;
 
 public class Usuario extends Perfil {
 	
+	
+	private int id;
+	
 	/*private List<VistoHasta> continuarViendo;*/
 	
 	//private List<Audiovisual> favoritos;
@@ -42,6 +45,17 @@ public class Usuario extends Perfil {
 	
 	
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+
+
 	public List<Resena> getMisResenas() {
 		return misResenas;
 	}

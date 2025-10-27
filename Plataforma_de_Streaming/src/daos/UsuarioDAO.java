@@ -7,8 +7,16 @@ import perfiles.Usuario;
 
 public class UsuarioDAO {
 
+	private final Connection conexion;
+	
+	
+	public UsuarioDAO() {
+		conexion = ConexionBD.getInstancia().conectarBD();
+	}
+	
+	
 	public void insertar(Usuario usuario) {
-		Connection conexion = ConexionBD.getInstancia().conectarBD();
+
 		String SQL = "INSERT INTO USUARIO (NOMBRE_USUARIO, EMAIL, CONTRASENA) VALUES (?, ?, ?)";
 		try {
 			PreparedStatement p_stmt = conexion.prepareStatement(SQL);
@@ -21,11 +29,17 @@ public class UsuarioDAO {
 		} 
 	}
 	
-	public List<Usuario> listar() {
+	public List<Usuario> listarUsuarios() {
+		
 		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 		String SQL= "SELECT * FROM USUARIO";
 		
+		try {
+			
+		} catch (SQLException e) {
+			System.err.println("❌ Error al insertar usuario: " + e.getMessage());
+		}
+		
 		return listaUsuarios;
 	}
-	
 }

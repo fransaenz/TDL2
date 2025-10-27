@@ -3,12 +3,14 @@ package cuerpo;
 
 import java.util.List;
 import java.util.Scanner;
-import logicas.Servicio;
+
 import java.time.Duration;
 import resenas.Resena;
 import util.*;
 import perfiles.*;
 import audiovisuales.*;
+import daos.ConexionBD;
+
 import java.util.Collections;
 //Quiero saber si esta bien poner el Collections
 
@@ -16,7 +18,8 @@ public class Apli {
 
 	public static void main(String[] args) {
 		
-		Servicio aux = new Servicio(); 
+		ConexionBD.getInstancia().inicializarBD();
+		
 		Scanner scanner = new Scanner(System.in);
 		boolean bien = false;
 		
@@ -282,7 +285,7 @@ public class Apli {
 		String contrasena = scanner.nextLine();
 		//consigo la lista de usuarios
 		for (i = 0; i < usuarios.size(); i++) {
-			if ((usuarios.get(i).getNombreUsuario().equals(nombreUsu)) && (usuarios.get(i).getContrasena().equals(contrasena)){
+			if ((usuarios.get(i).getNombreUsuario().equals(nombreUsu)) && (usuarios.get(i).getContrasena().equals(contrasena))){
 				validacion = true;
 				break;
 			}
@@ -294,7 +297,7 @@ public class Apli {
 	        }
 			while (validacion) {
 			 System.out.println("Eliga la pelicula: ");
-			 int j = scanner.nextInt();
+			 j = scanner.nextInt();
 			 if ((j >= 0) && (j < peliculas.size()) ) {
 				 validacion = false;
 				 peli = peliculas.get(j);
@@ -321,7 +324,7 @@ public class Apli {
 						"\n y le da " + estrellas + " estrellas a la pelicula");	
 				j = scanner.nextInt();
 			}
-			Resena res = new Resena(peli, usuarios.get(i), estrellas, texto);
+			Resena res = usuarios.get(i).crearResena(peli, estrellas, texto);
 			//se guarda resena en la base de datos
 		}
 		
