@@ -9,10 +9,10 @@ import resenas.Resena;
 import util.*;
 import perfiles.*;
 import audiovisuales.*;
-import daos.ConexionBD;
+import daos.*;
 
 import java.util.Collections;
-//Quiero saber si esta bien poner el Collections
+
 
 public class Apli {
 
@@ -58,6 +58,7 @@ public class Apli {
 		int aux = 0;
 		int nroTarjeta = 0;
 		boolean valido = false;
+		PersonaDAO p = new PersonaDAO();
 		while (aux == 0) {
 			while (!valido) {
 				System.out.println("Ingrese el nombre");
@@ -91,12 +92,11 @@ public class Apli {
 			while(!valido) {
 				System.out.println("Ingrese el DNI");
 				dni = scanner.nextInt();
-				//consigo la lista de dni de la base de datos
-				// if(la lista.contains(dni)){ valido = true;}
-				// if (valido) {
-					//System.out.println("El DNI no esta permitido ya que no es unico, ingreselo de nuevo");
-					// valido = false;
-				//}
+				if(p.existeDNI(dni)){ valido = true;}
+				if (valido) {
+					System.out.println("El DNI no esta permitido ya que no es unico, ingreselo de nuevo");
+					 valido = false;
+				}
 			}
 			System.out.println("Ingrese el numero de la tarjeta");
 			nroTarjeta = scanner.nextInt();
@@ -105,30 +105,30 @@ public class Apli {
 		aux = scanner.nextInt();
 		} 
 		Persona per = new Persona (nombre, apellido, dni, nroTarjeta);
-		// ingreso persona y el dni (a su lista) a la base de datos
+		p.insertar(per);
 	}
 	
 	
 	private static void metodoDos(Scanner scanner) {
+		PersonaDAO p = new PersonaDAO();
+		UsuarioDAO u = new UsuarioDAO();
 		String email = "";
 		String contrasena = "";
 		String nombreUsuario = "";
 		boolean var = false;
 		int bla = 0;
-		//consigo la lista de personas guardadas en la base de datos
-		/*
-		 * int aux = 0;
-		 * int i = 0
-		 for (i = 0; i < lista.length(); i++) {
-		 	system.out.println (lista.get(i).toString);
-		 	system.out.println ("¿Ésta es la persona que desea asociar al nuevo usuario? Si es correcto ingrese 1, en caso contrario ingrese 0");
+		List<Persona> personas  = p.listarPersonas();
+		int aux = 0;
+		int i = 0;
+		for (i = 0; i < personas.size(); i++) {
+		 	System.out.println (personas.get(i).toString());
+		 	System.out.println ("¿Ésta es la persona que desea asociar al nuevo usuario? Si es correcto ingrese 1, en caso contrario ingrese 0");
 		 	aux = scanner.nextInt();
 		 	if (aux == 1) {
 						break;
 					}
 			}
-		  Persona per = lista.get(i);
-		 */
+		Persona per = personas.get(i);
 		while(bla == 0) {
 			while(!var) {
 				System.out.println("Ingrese el email");
@@ -150,8 +150,8 @@ public class Apli {
 		bla = scanner.nextInt();
 		}
 		Usuario usu = new Usuario(email, contrasena, nombreUsuario);
-		per.setPerfil(usu);
-		//actualizo la persona y subo el usuario
+		personas.get(i).actualizarUsuario(usu, per); 
+		u.insertar(usu);
 	}
 	
 	
@@ -171,6 +171,7 @@ public class Apli {
 	
 	
 	private static void metodoTres(Scanner scanner) {
+		PeliculaDAO pe = new PeliculaDAO();
 		int aux = 0;
 		String titulo = "";
 		String director = "";
@@ -206,7 +207,7 @@ public class Apli {
         }
         int auxiliar = scanner.nextInt();
         auxiliar --;
-        if ((auxiliar >= 0) && (auxiliar < opciones.size()) ) {
+        if ((auxiliar >= 0) && (auxiliar < opciones.length) ) {
         	genero = opciones[auxiliar];
         	ayuda = true;
         }
@@ -219,11 +220,12 @@ public class Apli {
 		aux = scanner.nextInt();
 		}
 		Pelicula peli = new Pelicula(titulo, director,  elenco, genero, total, resumen);
-		// Poner la pelicula en la base de datos
+		pe.insertar(peli);
 	}
 	
 	private static void metodoCuatro(Scanner scanner) {
-		//obtener la lista de usuarios
+		UsuarioDAO u = new UsuarioDAO();
+		List<Usuario> usuarios  = u.listarUsuarios();
 		 System.out.println("¿Cómo querés ordenar la lista?");
 	        System.out.println("1. Por nombre de usuario");
 	        System.out.println("2. Por email");
@@ -239,14 +241,15 @@ public class Apli {
 	        }
 
 	        System.out.println("\nUsuarios ordenados:");
-	        for (Usuario u : usuarios) {
-	            System.out.println(u);
+	        for (Usuario usu : usuarios) {
+	            System.out.println(usu);
 	        }
 	
 	}
 
 	private static void metodoCinco(Scanner scanner) {
-		//obtener la lista de peliculas
+		PeliculaDAO pe = new PeliculaDAO();
+		List<Pelicula> peliculas  = pe.listarPeliculas();
 		System.out.println("¿Cómo querés ordenar la lista?");
         System.out.println("1. Por titulo de la pelicula");
         System.out.println("2. Por genero de la pelicula");
@@ -272,6 +275,9 @@ public class Apli {
 	}
 	
 	private static void metodoSeis(Scanner scanner) {
+		PeliculaDAO pe = new PeliculaDAO();
+		UsuarioDAO u = new UsuarioDAO();
+		ResenaDAO r = new ResenaDAO();
 		boolean validacion = false;
 		Pelicula peli = null;
 		int i = 0;
@@ -283,7 +289,7 @@ public class Apli {
 		String nombreUsu = scanner.nextLine();
 		System.out.println("Ingrese la contrasena del usuario: ");
 		String contrasena = scanner.nextLine();
-		//consigo la lista de usuarios
+		List<Usuario> usuarios  = u.listarUsuarios();
 		for (i = 0; i < usuarios.size(); i++) {
 			if ((usuarios.get(i).getNombreUsuario().equals(nombreUsu)) && (usuarios.get(i).getContrasena().equals(contrasena))){
 				validacion = true;
@@ -291,7 +297,7 @@ public class Apli {
 			}
 		}
 		if (validacion) {
-			//consigo lista de peliculas
+			List<Pelicula> peliculas  = pe.listarPeliculas();
 			for (j = 0; j < peliculas.size(); j++) {
 	            System.out.println((j + 1) + ". " + peliculas.get(j)); 
 	        }
@@ -325,14 +331,15 @@ public class Apli {
 				j = scanner.nextInt();
 			}
 			Resena res = usuarios.get(i).crearResena(peli, estrellas, texto);
-			//se guarda resena en la base de datos
+			r.insertar(res);
 		}
 		
 		
 	}
 
 	private static void metodoSiete(Scanner scanner) {
-	//se consigue la lista de resenas
+		ResenaDAO r = new ResenaDAO();
+		List<Resena> resenas  = r.listarResenas();
 		boolean aux = false;
 		int j = 0;
 		int i = 0;
@@ -356,7 +363,7 @@ public class Apli {
 	    System.out.println("Si la resena que desea aprobar es esa ingrese 1, en el caso contrario ingrese 0");
 	    i = scanner.nextInt();
 	    if (i == 1) {
-	    	resenas.get(j).aprobar();
+	    	r.aprobar (resenas.get(j));
 	    }
 	}
 	
