@@ -3,6 +3,7 @@ package daos;
 import java.sql.*;
 import java.util.List;
 
+import perfiles.Persona;
 import perfiles.Usuario;
 
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ public class ResenaDAO {
 	        p_stmt.setInt(5, resena.getAutor().getId());
 	        p_stmt.setInt(6, resena.getContenidoResenado().getId());
 			p_stmt.executeUpdate();
+			p_stmt.close();
 		} catch (SQLException e) {
             System.err.println("❌ Error al insertar resena: " + e.getMessage());
 		} 
@@ -42,8 +44,13 @@ public class ResenaDAO {
 		List<Resena> listaResenas = new LinkedList<Resena>();
 		String SQL= "SELECT * FROM RESENA";
 		
-		try {
-			
+		try (Statement stmt = conexion.createStatement();
+				 ResultSet resul = stmt.executeQuery(SQL))
+			{
+				Resena resena;
+				while(resul.next()) {
+					resena = new Resena(//faltan argumentos, por ej conseguir el autor y el contenidoResenado);
+					listaResenas.addLast(resena);
 		} catch (SQLException e) {
 			System.err.println("❌ Error al listar resenas: " + e.getMessage());
 		}
@@ -52,7 +59,15 @@ public class ResenaDAO {
 	}
 
 	public void aprobar (Resena resena) {
-		
+		String SQL = "UPDATE RESENA SET APROBADO = true WHERE";
+		try (Statement stmt = conexion.createStatement();
+		 ResultSet resul = stmt.executeQuery(SQL))
+		{
+			//falta especificar que resena actualizar
+		}
+		} catch (SQLException e) {
+			System.err.println("❌ Error al verificar si existe el dni: " + e.getMessage());
+		}
 	}
 
 }
