@@ -1,6 +1,6 @@
 package resenas;
 
-import audiovisuales.Audiovisual;
+import audiovisuales.Pelicula;
 
 import perfiles.Usuario;
 
@@ -17,7 +17,7 @@ public class Resena {
 	
 	
 	
-	public Resena(Audiovisual contenidoResenado, Usuario autor, int estrellas, String texto) {
+	public Resena(Pelicula contenidoResenado, Usuario autor, int estrellas, String texto) {
 		this.contenidoResenado = contenidoResenado;
 		this.autor = autor;
 		this.estrellas = estrellas;
@@ -26,9 +26,19 @@ public class Resena {
 		this.fechaHora = LocalDateTime.now();
 	}
 	
+	public Resena(Pelicula contenidoResenado, Usuario autor, int estrellas, String texto, LocalDateTime fechaHora) {
+		this.contenidoResenado = contenidoResenado;
+		this.autor = autor;
+		this.estrellas = estrellas;
+		this.texto = texto;
+		this.aprobada = false;
+		this.fechaHora = fechaHora;
+	}
+	
+	
 	
 
-	private Audiovisual contenidoResenado;
+	private Pelicula contenidoResenado;
 	
 	private Usuario autor;
 	
@@ -44,11 +54,11 @@ public class Resena {
 	
 	/*getters setters*/
 	
-	public Audiovisual getContenidoResenado() {
+	public Pelicula getContenidoResenado() {
 		return contenidoResenado;
 	}
 
-	public void setContenidoResenado(Audiovisual contenidoResenado) {
+	public void setContenidoResenado(Pelicula contenidoResenado) {
 		if (contenidoResenado == null) {
             throw new IllegalArgumentException("El contenido reseñado no puede ser nulo.");
 		}

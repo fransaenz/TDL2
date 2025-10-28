@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import perfiles.Persona;
 import perfiles.Usuario;
 
 public class UsuarioDAO {
@@ -55,6 +54,30 @@ public class UsuarioDAO {
 		}
 		
 		return listaUsuarios;
+	}
+	
+	public Usuario buscarPorId(int id) {
+	    String SQL = "SELECT * FROM USUARIO WHERE ID = ?";
+	    try (PreparedStatement p_stmt = conexion.prepareStatement(SQL)) 
+	    {
+	        p_stmt.setInt(1, id);
+	        try (ResultSet resul = p_stmt.executeQuery())
+	        {
+	        	Usuario usr;
+	        	if (resul.next()) {
+	        		usr = new Usuario(
+	        				resul.getString("NOMBRE_USUARIO"),
+	        				resul.getString("EMAIL"),
+	        				resul.getString("CONTRASENA")
+	        				);
+	        		usr.setId(resul.getInt("ID"));
+	        		return usr;
+	        	}
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al buscar usuario: " + e.getMessage());
+	    }
+	    return null;
 	}
 	
 }

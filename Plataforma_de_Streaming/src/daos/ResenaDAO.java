@@ -3,8 +3,8 @@ package daos;
 import java.sql.*;
 import java.util.List;
 
-import perfiles.Persona;
 import perfiles.Usuario;
+import audiovisuales.Pelicula;
 
 import java.util.LinkedList;
 import resenas.Resena;
@@ -48,9 +48,27 @@ public class ResenaDAO {
 				 ResultSet resul = stmt.executeQuery(SQL))
 			{
 				Resena resena;
+				UsuarioDAO usrDAO = new UsuarioDAO();
+				PeliculaDAO peliDAO = new PeliculaDAO();
+				LocalDateTime fechaHora = LocalDateTime.parse(resul.getString("FECHA_HORA"));
+				
 				while(resul.next()) {
-					resena = new Resena(//faltan argumentos, por ej conseguir el autor y el contenidoResenado);
+					
+					int idUsuario = resul.getInt("ID_USUARIO");
+					int idPelicula = resul.getInt("ID_PELICULA");
+					
+					Usuario autor = usrDAO.buscarPorId(idUsuario);
+					Pelicula contResenado = peliDAO.buscarPorId(idPelicula);
+					
+					resena = new Resena(
+							contResenado,
+							autor,
+							resul.getInt("CALIFICACION"),
+			                resul.getString("COMENTARIO"),
+			                fechaHora
+			                );
 					listaResenas.addLast(resena);
+				}
 		} catch (SQLException e) {
 			System.err.println("❌ Error al listar resenas: " + e.getMessage());
 		}

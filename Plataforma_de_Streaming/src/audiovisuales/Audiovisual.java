@@ -15,8 +15,6 @@ import util.*;
  */
 
 public abstract class Audiovisual {
-		
-	private int id;
 	
 	 /** Titulo del audiovisual */
     private String titulo;

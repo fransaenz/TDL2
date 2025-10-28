@@ -1,11 +1,14 @@
 package daos;
 
 import java.sql.*;
+import java.time.Duration;
 import java.util.List;
 import java.util.LinkedList;
 
 import audiovisuales.Pelicula;
 import perfiles.Persona;
+import perfiles.Usuario;
+import util.Genero;
 
 public class PeliculaDAO {
 
@@ -22,7 +25,7 @@ public class PeliculaDAO {
 			PreparedStatement p_stmt = conexion.prepareStatement(SQL);
 			p_stmt.setString(1, pelicula.getTitulo());
 			p_stmt.setString(2, pelicula.getDirector());
-			p_stmt.setString(3, pelicula.getGenero().toString()); 
+			p_stmt.setString(3, pelicula.getGenero().name()); 
 			p_stmt.setInt(4, (int) pelicula.getDuracion().toMinutes());
 			p_stmt.setString(5, pelicula.getElenco());
 			p_stmt.setString(6, pelicula.getResumen());
@@ -41,16 +44,18 @@ public class PeliculaDAO {
 				 ResultSet resul = stmt.executeQuery(SQL))
 			{
 				Pelicula pelicula;
+				Genero genero = Genero.valueOf(resul.getString("GENERO").toUpperCase());
+				Duration duracion; //= //tal tal tal
 				while(resul.next()) {
 					
 					pelicula = new Pelicula(
-							resul.getString("TITULO"),
-							resul.getString("DIRECTOR"),
-							resul.getString("ELENCO"),
-							resul.getString("GENERO")//falta transformarlo a enum,
-							resul.getInt("DURACION")//falta pasarlo a tiempo,
-							resul.getString("RESUMEN")
-							);
+	        				resul.getString("TITULO"),
+	        				resul.getString("DIRECTOR"),
+	        				resul.getString("ELENCO"),
+	        				genero,
+	        				duracion,
+	        				resul.getString("RESUMEN")
+	            			);
 					listaPeliculas.addLast(pelicula);
 				}
 			
@@ -61,6 +66,33 @@ public class PeliculaDAO {
 		return listaPeliculas;
 	}
 	
-	
+	public Pelicula buscarPorId(int id) {
+	    String SQL = "SELECT * FROM PELICULA WHERE ID = ?";
+	    try (PreparedStatement p_stmt = conexion.prepareStatement(SQL)) 
+	    {
+	        p_stmt.setInt(1, id);
+	        try (ResultSet resul = p_stmt.executeQuery())
+	        {
+	        	Pelicula peli;
+	        	Genero genero = Genero.valueOf(resul.getString("GENERO").toUpperCase());
+	        	Duration duracion; //= //tal tal tal
+	        	if (resul.next()) {
+	        		peli = new Pelicula(
+	        				resul.getString("TITULO"),
+	        				resul.getString("DIRECTOR"),
+	        				resul.getString("ELENCO"),
+	        				genero,
+	        				duracion,
+	        				resul.getString("RESUMEN")
+	            			);
+	        		peli.setId(resul.getInt("ID"));
+	        		return peli;
+	        	}
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al buscar usuario: " + e.getMessage());
+	    }
+	    return null;
+	}
 	
 }
