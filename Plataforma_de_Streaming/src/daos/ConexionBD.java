@@ -6,6 +6,12 @@ public class ConexionBD {
 	
 	//constructor privado
 	private ConexionBD() {
+		try {
+	        conexion = DriverManager.getConnection(URL);
+	        System.out.println("✅ Conexión a BD establecida correctamente.");
+	    } catch (java.sql.SQLException e) {
+	    System.out.println("❌ Error al conectar con la BD: " + e.getMessage());
+	    } 
 	}
 	
 	
@@ -13,15 +19,6 @@ public class ConexionBD {
 	private static final  ConexionBD INSTANCE = new ConexionBD();
 	private static final String URL = "jdbc:sqlite:Plataforma_de_Streaming.DB";
 	
-	
-	 static {
-		    try {
-		        conexion = DriverManager.getConnection(URL);
-		        System.out.println("✅ Conexión a BD establecida correctamente.");
-		    } catch (java.sql.SQLException e) {
-		    System.out.println("❌ Error al conectar con la BD: " + e.getMessage());
-		    } 
-	 }
 	 
 	//metodos
 	
@@ -86,7 +83,7 @@ public class ConexionBD {
               "CALIFICACION INTEGER NOT NULL, " +
               "COMENTARIO TEXT(500), " +
               "APROBADO INTEGER DEFAULT 1 NOT NULL, " +
-              "FECHA_HORA DATETIME NOT NULL, " +
+              "FECHA_HORA TEXT(100) NOT NULL, " +
               "ID_USUARIO INTEGER NOT NULL, " +
               "ID_PELICULA INTEGER NOT NULL, " +
               "CONSTRAINT RESENA_USUARIO_FK FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID), " +

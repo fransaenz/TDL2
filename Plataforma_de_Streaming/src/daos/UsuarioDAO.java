@@ -3,6 +3,8 @@ package daos;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
+
+import perfiles.Persona;
 import perfiles.Usuario;
 
 public class UsuarioDAO {
@@ -24,6 +26,7 @@ public class UsuarioDAO {
 	        p_stmt.setString(2, usuario.getEmail());
 	        p_stmt.setString(3, usuario.getContrasena());
 			p_stmt.executeUpdate();
+			p_stmt.close();
 		} catch (SQLException e) {
             System.err.println("❌ Error al insertar usuario: " + e.getMessage());
 		} 
@@ -34,12 +37,24 @@ public class UsuarioDAO {
 		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 		String SQL= "SELECT * FROM USUARIO";
 		
-		try {
-			
+		try (Statement stmt = conexion.createStatement();
+				 ResultSet resul = stmt.executeQuery(SQL))
+		{
+			Usuario usuario;
+			while(resul.next()) {
+				usuario = new Usuario(
+						resul.getString("NOMBRE_USUARIO"),
+						resul.getString("EMAIL"),
+						resul.getString("CONTRASENA")
+				);
+				listaUsuarios.addLast(usuario);
+			}
+		
 		} catch (SQLException e) {
 			System.err.println("❌ Error al insertar usuario: " + e.getMessage());
 		}
 		
 		return listaUsuarios;
 	}
+	
 }

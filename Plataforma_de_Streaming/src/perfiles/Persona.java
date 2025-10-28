@@ -3,7 +3,7 @@ package perfiles;
 public class Persona {
 
 
-	public Persona(String nombre, String apellido, int dni, int nroTarjeta, Perfil perfil) {
+	public Persona(String nombre, String apellido, int dni, int nroTarjeta, Usuario perfil) {
 		super();
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -31,7 +31,7 @@ public class Persona {
 	
 	private int nroTarjeta;
 	
-	private Perfil perfil;
+	private Usuario perfil;
 
 	
 	
@@ -67,11 +67,11 @@ public class Persona {
 		this.nroTarjeta = nroTarjeta;
 	}
 
-	public Perfil getPerfil() {
+	public Usuario getPerfil() {
 		return perfil;
 	}
 
-	public void setPerfil(Perfil perfil) {
+	public void setPerfil(Usuario perfil) {
 		this.perfil = perfil;
 	}
 
