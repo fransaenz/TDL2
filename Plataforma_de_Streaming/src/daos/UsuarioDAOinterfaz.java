@@ -8,5 +8,5 @@ public interface UsuarioDAOinterfaz {
 	
 	void insertar(Usuario usuario); //use
 	List<Usuario> listarUsuarios(); //use
-	
+	Usuario buscarPorId(int id); //use
 }

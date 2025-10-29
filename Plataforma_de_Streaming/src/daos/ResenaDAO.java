@@ -2,16 +2,15 @@ package daos;
 
 import java.sql.*;
 import java.util.List;
+import java.util.LinkedList;
 
 import perfiles.Usuario;
 import audiovisuales.Pelicula;
-
-import java.util.LinkedList;
 import resenas.Resena;
 import java.time.LocalDateTime;
 
 
-public class ResenaDAO {
+public class ResenaDAO implements ResenaDAOinterfaz{
 
 	private final Connection conexion;
 	
@@ -50,7 +49,6 @@ public class ResenaDAO {
 				Resena resena;
 				UsuarioDAO usrDAO = new UsuarioDAO();
 				PeliculaDAO peliDAO = new PeliculaDAO();
-				LocalDateTime fechaHora = LocalDateTime.parse(resul.getString("FECHA_HORA"));
 				
 				while(resul.next()) {
 					
@@ -65,9 +63,13 @@ public class ResenaDAO {
 							autor,
 							resul.getInt("CALIFICACION"),
 			                resul.getString("COMENTARIO"),
-			                fechaHora
-			                );
+			                LocalDateTime.parse(resul.getString("FECHA_HORA"))
+							);
+					resena.setId(resul.getInt("ID"));
 					listaResenas.addLast(resena);
+					
+					if (resul.getBoolean("APROBADO")) resena.aprobar();
+					else						 	  resena.desaprobar();
 				}
 		} catch (SQLException e) {
 			System.err.println("❌ Error al listar resenas: " + e.getMessage());
@@ -76,15 +78,17 @@ public class ResenaDAO {
 		return listaResenas;
 	}
 
-	public void aprobar (Resena resena) {
-		String SQL = "UPDATE RESENA SET APROBADO = true WHERE";
-		try (Statement stmt = conexion.createStatement();
-		 ResultSet resul = stmt.executeQuery(SQL))
+	public boolean aprobar (Resena resena) {
+		String SQL = "UPDATE RESENA SET APROBADO = 1 WHERE ID = ?";
+		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL))
 		{
-			//falta especificar que resena actualizar
-		}
+			p_stmt.setInt(1, resena.getId());
+			int filas = p_stmt.executeUpdate();
+			return filas >0;
+		
 		} catch (SQLException e) {
 			System.err.println("❌ Error al verificar si existe el dni: " + e.getMessage());
+			return false;
 		}
 	}
 

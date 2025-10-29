@@ -8,5 +8,5 @@ public interface ResenaDAOinterfaz {
 
 	void insertar(Resena resena); //use
 	List<Resena> listarResenas(); //use
-	void aprobar (Resena resena); //use
+	boolean aprobar (Resena resena); //use
 }

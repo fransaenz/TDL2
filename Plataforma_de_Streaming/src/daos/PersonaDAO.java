@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import perfiles.Persona;
 import perfiles.Usuario;
 
-public class PersonaDAO {
+public class PersonaDAO implements PersonaDAOinterfaz{
 	
 	
 	private final Connection conexion;
@@ -32,7 +32,7 @@ public class PersonaDAO {
 			p_stmt.executeUpdate();
 			p_stmt.close();
 		} catch (SQLException e) {
-            System.err.println("❌ Error al insertar usuario: " + e.getMessage());
+            System.err.println("❌ Error al insertar datos personales: " + e.getMessage());
 		}
 	}
 
@@ -53,6 +53,7 @@ public class PersonaDAO {
 						resul.getInt("DNI"),
 						resul.getInt("NRO_TARJETA")
 						);
+				persona.setId(resul.getInt("ID"));
 				listaPersonas.addLast(persona);
 			}
 		
@@ -63,28 +64,33 @@ public class PersonaDAO {
 		return listaPersonas;
 	}
 	
-	public void actualizarUsuario(Usuario usuario, Persona persona) {
-		String SQL = "UPDATE DATOS_PERSONALES SET ID_USUARIO = usuario.getID() WHERE .... =";
-		try (Statement stmt = conexion.createStatement();
-		 ResultSet resul = stmt.executeQuery(SQL))
-		{
+	public boolean actualizarUsuario(Usuario usuario, Persona persona) {
+		String SQL = "UPDATE DATOS_PERSONALES SET ID_USUARIO = ? WHERE ID = ?";
+		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL))
+		{	
+			p_stmt.setInt(1, usuario.getId());
+			p_stmt.setInt(2, persona.getId());
+			int filas = p_stmt.executeUpdate();
+			return filas >0;
 			
 		} catch (SQLException e) {
 			System.err.println("❌ Error al verificar si existe el dni: " + e.getMessage());
+			return false;
 		}
 	}
 	
 	public boolean existeDNI(int dni) {
-		
-		String dniStr = /*hay que convertir dni a String creo*/;
-		String SQL = "SELECT DNI FROM DATOS_PERSONALES DNI= dni";
-		try (Statement stmt = conexion.createStatement();
-		 ResultSet resul = stmt.executeQuery(SQL))
+		String SQL = "SELECT * FROM DATOS_PERSONALES WHERE DNI = ?";
+		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL))
 		{
-			boolean existe = false;
-			if(tal cosa) existe = true;
+			p_stmt.setInt(1, dni);
+			try (ResultSet resul = p_stmt.executeQuery())
+			{
+					return resul.next();
+			}
 		} catch (SQLException e) {
 			System.err.println("❌ Error al verificar si existe el dni: " + e.getMessage());
+			return false;
 		}
-	
+	}
 }

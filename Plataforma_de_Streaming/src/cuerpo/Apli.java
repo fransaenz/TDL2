@@ -150,8 +150,13 @@ public class Apli {
 		bla = scanner.nextInt();
 		}
 		Usuario usu = new Usuario(email, contrasena, nombreUsuario);
-		personas.get(i).actualizarUsuario(usu, per); 
-		u.insertar(usu);
+		if(p.actualizarUsuario(usu, per))
+		{
+			System.out.println("El usuario se asigno a la persona correctamente");
+			u.insertar(usu);
+		} else {
+			System.out.println("El usuario se asigno a la persona correctamente");
+		}
 	}
 	
 	
@@ -344,7 +349,7 @@ public class Apli {
 		int j = 0;
 		int i = 0;
 		for (j = 0; j < resenas.size(); j++) {
-			if (resenas.get(i).estaAprobada() == false) {
+			if (resenas.get(j).estaAprobada() == false) {
 				i++;
 	            System.out.println((i) + ". " + resenas.get(j)); 
 			}
@@ -363,7 +368,13 @@ public class Apli {
 	    System.out.println("Si la resena que desea aprobar es esa ingrese 1, en el caso contrario ingrese 0");
 	    i = scanner.nextInt();
 	    if (i == 1) {
-	    	r.aprobar (resenas.get(j));
+	    	if(r.aprobar (resenas.get(j))) {
+	    		System.out.println("Se actualizo la resena");
+	    	}
+	    	else{
+	    		System.out.println("Se actualizo la resena");
+	    	}
+	    	
 	    }
 	}
 	

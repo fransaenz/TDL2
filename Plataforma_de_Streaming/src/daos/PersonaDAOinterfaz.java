@@ -11,7 +11,7 @@ public interface PersonaDAOinterfaz {
 
     List<Persona> listarPersonas(); //use
 
-    void actualizarUsuario(Usuario usuario, Persona persona); //use
+    boolean actualizarUsuario(Usuario usuario, Persona persona); //use
 
     boolean existeDNI(int dni); //use
 	

@@ -21,7 +21,7 @@ public class Persona {
 		this.perfil = null;
 	}
 
-	
+	private int id;
 	
 	private String nombre;
 	
@@ -34,6 +34,13 @@ public class Persona {
 	private Usuario perfil;
 
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getNombre() {
 		return nombre;

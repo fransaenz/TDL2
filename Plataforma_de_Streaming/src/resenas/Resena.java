@@ -36,7 +36,7 @@ public class Resena {
 	}
 	
 	
-	
+	private int id;
 
 	private Pelicula contenidoResenado;
 	
@@ -53,6 +53,16 @@ public class Resena {
 	
 	
 	/*getters setters*/
+
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		 this.id = id;
+	}
+
 	
 	public Pelicula getContenidoResenado() {
 		return contenidoResenado;

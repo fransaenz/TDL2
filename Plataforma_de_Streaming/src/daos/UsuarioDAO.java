@@ -2,11 +2,11 @@ package daos;
 
 import java.sql.*;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import perfiles.Usuario;
 
-public class UsuarioDAO {
+public class UsuarioDAO implements UsuarioDAOinterfaz{
 
 	private final Connection conexion;
 	
@@ -33,7 +33,7 @@ public class UsuarioDAO {
 	
 	public List<Usuario> listarUsuarios() {
 		
-		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+		List<Usuario> listaUsuarios = new LinkedList<Usuario>();
 		String SQL= "SELECT * FROM USUARIO";
 		
 		try (Statement stmt = conexion.createStatement();

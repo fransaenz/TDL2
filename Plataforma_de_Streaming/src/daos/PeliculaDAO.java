@@ -1,16 +1,14 @@
 package daos;
 
 import java.sql.*;
-import java.time.Duration;
 import java.util.List;
 import java.util.LinkedList;
 
 import audiovisuales.Pelicula;
-import perfiles.Persona;
-import perfiles.Usuario;
+import java.time.Duration;
 import util.Genero;
 
-public class PeliculaDAO {
+public class PeliculaDAO implements PeliculaDAOinterfaz{
 
 	private final Connection conexion;
 	
@@ -32,7 +30,7 @@ public class PeliculaDAO {
 			p_stmt.executeUpdate();
 			p_stmt.close();
 		} catch (SQLException e) {
-            System.err.println("❌ Error al insertar resena: " + e.getMessage());
+            System.err.println("❌ Error al insertar pelicula: " + e.getMessage());
 		} 
 	}
 	
@@ -44,23 +42,22 @@ public class PeliculaDAO {
 				 ResultSet resul = stmt.executeQuery(SQL))
 			{
 				Pelicula pelicula;
-				Genero genero = Genero.valueOf(resul.getString("GENERO").toUpperCase());
-				Duration duracion; //= //tal tal tal
+				
 				while(resul.next()) {
-					
 					pelicula = new Pelicula(
-	        				resul.getString("TITULO"),
+							resul.getString("TITULO"),
 	        				resul.getString("DIRECTOR"),
 	        				resul.getString("ELENCO"),
-	        				genero,
-	        				duracion,
+	        				Genero.valueOf(resul.getString("GENERO").toUpperCase()),
+	        				Duration.ofMinutes(resul.getInt("DURACION")),
 	        				resul.getString("RESUMEN")
 	            			);
+					pelicula.setId(resul.getInt("ID"));
 					listaPeliculas.addLast(pelicula);
 				}
 			
 			} catch (SQLException e) {
-				System.err.println("❌ Error al listar personas: " + e.getMessage());
+				System.err.println("❌ Error al listar peliculas: " + e.getMessage());
 			}
 		
 		return listaPeliculas;
@@ -73,16 +70,15 @@ public class PeliculaDAO {
 	        p_stmt.setInt(1, id);
 	        try (ResultSet resul = p_stmt.executeQuery())
 	        {
-	        	Pelicula peli;
-	        	Genero genero = Genero.valueOf(resul.getString("GENERO").toUpperCase());
-	        	Duration duracion; //= //tal tal tal
+	        	Pelicula peli;;
+	        	
 	        	if (resul.next()) {
 	        		peli = new Pelicula(
 	        				resul.getString("TITULO"),
 	        				resul.getString("DIRECTOR"),
 	        				resul.getString("ELENCO"),
-	        				genero,
-	        				duracion,
+	        				Genero.valueOf(resul.getString("GENERO").toUpperCase()),
+	        				Duration.ofMinutes(resul.getInt("DURACION")),
 	        				resul.getString("RESUMEN")
 	            			);
 	        		peli.setId(resul.getInt("ID"));
@@ -90,7 +86,7 @@ public class PeliculaDAO {
 	        	}
 	        }
 	    } catch (SQLException e) {
-	        System.err.println("Error al buscar usuario: " + e.getMessage());
+	        System.err.println("Error al buscar pelicula: " + e.getMessage());
 	    }
 	    return null;
 	}

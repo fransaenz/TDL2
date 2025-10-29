@@ -7,7 +7,6 @@ import resenas.Resena;
 import java.util.List;
 import java.util.LinkedList;
 import util.*;
-import java.util.Comparator;
 
 
 public class Usuario extends Perfil {
@@ -112,7 +111,7 @@ public class Usuario extends Perfil {
 
 
 
-	public Resena crearResena(Audiovisual av, int estrellas, String texto) {
+	public Resena crearResena(Pelicula av, int estrellas, String texto) {
 		if (av == null) throw new IllegalArgumentException("Seleccione un audiovisual válido.");
 	    Resena res = new Resena(av,this,estrellas,texto);
 	    return res;
