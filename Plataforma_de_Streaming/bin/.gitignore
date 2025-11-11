@@ -1,6 +1,7 @@
+/modelo/
+/app/
 /cuerpo/
 /daos/
 /perfiles/
 /resenas/
-/util/
-/audiovisuales/
+/interfaces/

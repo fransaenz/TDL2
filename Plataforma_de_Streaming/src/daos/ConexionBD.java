@@ -72,7 +72,7 @@ public class ConexionBD {
               "APELLIDO TEXT(100) NOT NULL, " +
               "DNI INTEGER NOT NULL, " +
               "NRO_TARJETA INTEGER NOT NULL, " +
-              "ID_USUARIO INTEGER NOT NULL, " +
+              "ID_USUARIO INTEGER, " +
               "CONSTRAINT PERSONA_USUARIO_FK FOREIGN KEY (ID_USUARIO) " +
               "REFERENCES USUARIO(ID)" +
               ");";

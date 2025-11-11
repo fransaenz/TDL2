@@ -1,0 +1,153 @@
+package modelo.resenas;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+
+import modelo.audiovisuales.Pelicula;
+import modelo.perfiles.Usuario;
+
+
+/**
+ * Representa una reseña hecha por un usuario sobre un Audiovisual.
+ * Contiene validaciones básicas (estrellas entre 1 y 5), autor, fecha y estado de aprobación.
+ */
+public class Resena {
+	
+	
+	
+	public Resena(Pelicula contenidoResenado, Usuario autor, int estrellas, String texto) {
+		this.contenidoResenado = contenidoResenado;
+		this.autor = autor;
+		this.estrellas = estrellas;
+		this.texto = texto;
+		this.aprobada = false;
+		this.fechaHora = LocalDateTime.now();
+	}
+	
+	public Resena(Pelicula contenidoResenado, Usuario autor, int estrellas, String texto, LocalDateTime fechaHora) {
+		this.contenidoResenado = contenidoResenado;
+		this.autor = autor;
+		this.estrellas = estrellas;
+		this.texto = texto;
+		this.aprobada = false;
+		this.fechaHora = fechaHora;
+	}
+	
+	
+	private int id;
+
+	private Pelicula contenidoResenado;
+	
+	private Usuario autor;
+	
+	private int estrellas;
+	
+	private String texto;
+
+	private boolean aprobada;
+	
+	private LocalDateTime fechaHora;
+
+	
+	
+	/*getters setters*/
+
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		 this.id = id;
+	}
+
+	
+	public Pelicula getContenidoResenado() {
+		return contenidoResenado;
+	}
+
+	public void setContenidoResenado(Pelicula contenidoResenado) {
+		if (contenidoResenado == null) {
+            throw new IllegalArgumentException("El contenido reseñado no puede ser nulo.");
+		}
+		this.contenidoResenado = contenidoResenado;
+	}
+
+	
+	public Usuario getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Usuario autor) {
+        this.autor = autor; // puede ser null para reseñas anónimas
+    }
+	
+	public int getEstrellas() {
+		return estrellas;
+	}
+
+	public void setEstrellas(int estrellas) {
+		 if (estrellas < 1 || estrellas > 5) {
+	            throw new IllegalArgumentException("La calificación debe ser de entre 1 y 5 estrellas.");
+	        }
+		this.estrellas = estrellas;
+	}
+
+	public String getTexto() {
+		return texto;
+	}
+
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
+	
+	public boolean estaAprobada() {
+        return aprobada;
+    }
+	
+	 public LocalDateTime getFechaHora() {
+	        return fechaHora;
+	    }
+	 
+	/*mas metodos*/
+	 
+	 public void aprobar() {
+		 this.aprobada = true;
+	 }
+
+	 public void desaprobar() {
+		 this.aprobada = false;
+	 }
+	 
+	 @Override
+	 public String toString() {
+		 String autorStr = (autor != null) ? autor.getNombreUsuario() : "Anónimo";
+		 String fechaStr = this.fechaHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+		 return String.format("%s - %d★\n%s\n(autor: %s) (fecha: %s) (aprobada: %s)",
+	                contenidoResenado.getTitulo(),
+	                estrellas,
+	                texto.isEmpty() ? "(sin comentario)" : texto,
+	                autorStr,
+	                fechaStr,
+	                aprobada ? "sí" : "no");
+	 }
+	 
+	 @Override
+	 public boolean equals(Object o) {
+	     if (this == o) return true;
+	     if (!(o instanceof Resena)) return false;
+	     Resena resena = (Resena) o;
+	     return (this.estrellas == resena.estrellas) 
+	    	 && (this.contenidoResenado == resena.contenidoResenado)
+	         && (this.autor == resena.autor)
+	         && (this.texto == resena.texto)
+	         && (this.fechaHora == resena.fechaHora);
+	 }
+	 
+	 @Override
+	 public int hashCode() {
+		 return Objects.hash(contenidoResenado, autor, estrellas, texto, fechaHora);
+	 }
+	 
+}

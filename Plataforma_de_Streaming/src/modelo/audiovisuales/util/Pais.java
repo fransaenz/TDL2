@@ -1,0 +1,5 @@
+package modelo.audiovisuales.util;
+
+public enum Pais {
+	ARGENTINA, BOLIVIA, BRASIL, CHILE, COLOMBIA, CUBA, ECUADOR, HONDURAS, PARAGUAY, PERU, PUERTO_RICO, URUGUAY, VENEZUELA
+}
