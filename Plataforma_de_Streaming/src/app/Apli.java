@@ -42,13 +42,13 @@ public class Apli {
 			int var = scanner.nextInt();
 			switch(var) {
 				case 0 -> metodoCero(bien);
-				case 1 -> metodoUno(scanner);
-				case 2 -> metodoDos(scanner);
-				case 3 -> metodoTres(scanner);
-				case 4 -> metodoCuatro(scanner);
-				case 5 -> metodoCinco(scanner);
-				case 6 -> metodoSeis(scanner);
-				case 7 -> metodoSiete(scanner);
+				case 1 -> registrarDatosPersonales(scanner);
+				case 2 -> registrarUsuario(scanner);
+				case 3 -> registrarPelicula(scanner);
+				case 4 -> listarUsuarios(scanner);
+				case 5 -> listarPeliculas(scanner);
+				case 6 -> registrarResenia(scanner);
+				case 7 -> aprobarResenia(scanner);
 				default -> System.out.println("Ingreso no valido");
 			}
 		
@@ -63,7 +63,7 @@ public class Apli {
 	}
 		
 	
-	private static void metodoUno(Scanner scanner) {
+	private static void registrarDatosPersonales(Scanner scanner) {
 		scanner.nextLine();
 		String nombre = "";
 		String apellido = "";
@@ -141,7 +141,7 @@ public class Apli {
 	}
 	
 	
-	private static void metodoDos(Scanner scanner) {
+	private static void registrarUsuario(Scanner scanner) {
 		scanner.nextLine();
 		PersonaDAO p = new PersonaDAOjdbc();
 		UsuarioDAO u = new UsuarioDAOjdbc();
@@ -151,6 +151,10 @@ public class Apli {
 		boolean var = false;
 		int bla = 0;
 		List<Persona> personas  = p.listarPersonas();
+		if (personas.size() == 0) {
+			System.out.println("Error, no hay personas registradas.");
+			return;
+		}
 		int aux = 0;
 		int i = 0;
 		for (i = 0; i < personas.size(); i++) {
@@ -206,7 +210,7 @@ public class Apli {
     }
 	
 	
-	private static void metodoTres(Scanner scanner) {
+	private static void registrarPelicula(Scanner scanner) {
 		scanner.nextLine();
 		PeliculaDAO pe = new PeliculaDAOjdbc();
 		int aux = 0;
@@ -260,10 +264,14 @@ public class Apli {
 		pe.insertar(peli);
 	}
 	
-	private static void metodoCuatro(Scanner scanner) {
+	private static void listarUsuarios(Scanner scanner) {
 		scanner.nextLine();
 		UsuarioDAO u = new UsuarioDAOjdbc();
 		List<Usuario> usuarios  = u.listarUsuarios();
+		if (usuarios.size() == 0) {
+			System.out.println("Error, no hay usuarios registrados.");
+			return;
+		}
 		 System.out.println("¿Cómo querés ordenar la lista?");
 	        System.out.println("1. Por nombre de usuario");
 	        System.out.println("2. Por email");
@@ -285,10 +293,14 @@ public class Apli {
 	
 	}
 
-	private static void metodoCinco(Scanner scanner) {
+	private static void listarPeliculas(Scanner scanner) {
 		scanner.nextLine();
 		PeliculaDAO pe = new PeliculaDAOjdbc();
 		List<Pelicula> peliculas  = pe.listarPeliculas();
+		if (peliculas.size() == 0) {
+			System.out.println("Error, no hay peliculas registradas.");
+			return;
+		}
 		System.out.println("¿Cómo querés ordenar la lista?");
         System.out.println("1. Por titulo de la pelicula");
         System.out.println("2. Por genero de la pelicula");
@@ -313,7 +325,7 @@ public class Apli {
         }
 	}
 	
-	private static void metodoSeis(Scanner scanner) {
+	private static void registrarResenia(Scanner scanner) {
 		scanner.nextLine();
 		PeliculaDAO pe = new PeliculaDAOjdbc();
 		UsuarioDAO u = new UsuarioDAOjdbc();
@@ -330,6 +342,10 @@ public class Apli {
 		System.out.println("Ingrese la contrasena del usuario: ");
 		String contrasena = scanner.nextLine();
 		List<Usuario> usuarios  = u.listarUsuarios();
+		if (usuarios.size() == 0) {
+			System.out.println("Error, no hay usuarios registrados.");
+			return;
+		}
 		for (i = 0; i < usuarios.size(); i++) {
 			if ((usuarios.get(i).getNombreUsuario().equals(nombreUsu)) && (usuarios.get(i).getContrasena().equals(contrasena))){
 				validacion = true;
@@ -338,6 +354,10 @@ public class Apli {
 		}
 		if (validacion) {
 			List<Pelicula> peliculas  = pe.listarPeliculas();
+			if (peliculas.size() == 0) {
+				System.out.println("Error, no hay peliculas registradas.");
+				return;
+			}
 			for (j = 0; j < peliculas.size(); j++) {
 	            System.out.println((j + 1) + ". " + peliculas.get(j)); 
 	        }
@@ -377,10 +397,14 @@ public class Apli {
 		
 	}
 
-	private static void metodoSiete(Scanner scanner) {
+	private static void aprobarResenia(Scanner scanner) {
 		scanner.nextLine();
 		ResenaDAO r = new ResenaDAOjdbc();
 		List<Resena> resenas  = r.listarResenas();
+		if (resenas.size() == 0) {
+			System.out.println("Error, no hay resenias registradas.");
+			return;
+		}
 		boolean aux = false;
 		int j = 0;
 		int i = 0;
