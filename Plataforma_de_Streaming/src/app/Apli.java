@@ -81,6 +81,7 @@ public class Apli {
 		boolean valido = false;
 		PersonaDAO p = new PersonaDAOjdbc();
 		while (aux == 0) {
+			valido = false;
 			while (!valido) {
 				System.out.println("Ingrese el nombre");
 				nombre = scanner.nextLine();
@@ -143,6 +144,7 @@ public class Apli {
 		System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n nombre: " + nombre + 
 				"\n apellido: " + apellido + "\n DNI: " + dni + "\n nro de la tarjeta: " + nroTarjeta);	
 		aux = scanner.nextInt();
+		scanner.nextLine();
 		} 
 		Persona per = new Persona (nombre, apellido, dni, nroTarjeta);
 		p.insertar(per);
@@ -166,14 +168,18 @@ public class Apli {
 		int aux = 0;
 		int i = 0;
 		for (i = 0; i < personas.size(); i++) {
+			i++;
 			System.out.print("La persona numero " + i + " es: ");
+			i--;
 		 	System.out.println (personas.get(i).toString());
 		}
 		System.out.println("Ingrese el numero de persona que quiera vincular: ");
 		aux = scanner.nextInt();
 		scanner.nextLine();
+		aux--;
 		Persona per = personas.get(aux);
 		while(bla == 0) {
+			var = false;
 			while(!var) {
 				System.out.println("Ingrese el email");
 				email = scanner.nextLine();
@@ -192,6 +198,7 @@ public class Apli {
 		System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n email: " + email +  
 				"\n contrasena: " + contrasena + "\n nombre del usuario: " + nombreUsuario);	
 		bla = scanner.nextInt();
+		scanner.nextLine();
 		}
 		Usuario usu = new Usuario(email, contrasena, nombreUsuario);
 		if(p.actualizarUsuario(usu, per))
@@ -250,6 +257,7 @@ public class Apli {
 			long segundos = scanner.nextLong();
 	        Duration d1 = Duration.ofSeconds(segundos);
 	        total = d1.plus(d2).plus(d3);
+	        ayuda = false;
 	        while (!ayuda) {
 		        System.out.println("Eliga el genero de la pelicula: ");
 		        for (int i = 0; i < opciones.length; i++) {
@@ -268,6 +276,7 @@ public class Apli {
         System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n titulo: " + titulo + 
 				"\n director: " + director + "\n resumen: '" + resumen + "' \n elenco: " + elenco + "\n horas totales: " + total + "\n genero: " + genero );	
 		aux = scanner.nextInt();
+		scanner.nextLine();
 		}
 		Pelicula peli = new Pelicula(titulo, director,  elenco, genero, total, resumen);
 		pe.insertar(peli);
@@ -360,9 +369,10 @@ public class Apli {
 				validacion = true;
 				break;
 			}
-			else System.out.println("Datos ingresador incorrectos.");
+			else System.out.println("Datos ingresados incorrectos.");
 		}
 		if (validacion) {
+			System.out.println("Datos ingresados correctos.");
 			List<Pelicula> peliculas  = pe.listarPeliculas();
 			if (peliculas.size() == 0) {
 				System.out.println("Error, no hay peliculas registradas.");
@@ -384,6 +394,7 @@ public class Apli {
 			}
 			j = 0;
 			while(j == 0) {
+				esta = false;
 				while (!esta) {
 					System.out.println("Ingrese las estrellas de la pelicula entre 0 y 5: ");
 					estrellas = scanner.nextInt();
@@ -400,6 +411,7 @@ public class Apli {
 				System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n su resena es: " + texto + 
 						"\n y le da " + estrellas + " estrellas a la pelicula");	
 				j = scanner.nextInt();
+				scanner.nextLine();
 			}
 			Resena res = usuarios.get(i).crearResena(peli, estrellas, texto);
 			r.insertar(res);
@@ -421,14 +433,14 @@ public class Apli {
 		int i = 0;
 		for (j = 0; j < resenas.size(); j++) {
 			if (resenas.get(j).estaAprobada() == false) {
-				i++;
-	            System.out.println((i) + ". " + resenas.get(j)); 
+	            System.out.println((j+1) + ". " + resenas.get(j)); 
 			}
         }
 		while (!aux) {
 			System.out.println("Ingrese el numero de resena que desea aprobar: ");
 			j = scanner.nextInt();
-			if ((j > resenas.size()) || (j < 1) ) {
+			j--;
+			if ((j > resenas.size()) || (j < 0) ) {
 				System.out.println("El numero de resena no es valido ");
 			}
 			else {
@@ -443,9 +455,12 @@ public class Apli {
 	    		System.out.println("Se actualizo la resena");
 	    	}
 	    	else{
-	    		System.out.println("Se actualizo la resena");
+	    		System.out.println("No se actualizo la resena");
 	    	}
 	    	
+	    }
+	    else {
+	    	System.out.println("No se actualizo la resena");
 	    }
 	}
 	
