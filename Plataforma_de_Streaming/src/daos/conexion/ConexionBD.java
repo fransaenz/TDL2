@@ -1,4 +1,4 @@
-package daos;
+package daos.conexion;
 
 import java.sql.*;
 

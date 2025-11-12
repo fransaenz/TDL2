@@ -5,8 +5,17 @@ import java.util.List;
 import java.util.Scanner;
 
 import java.time.Duration;
+import java.util.Collections;
 
-import daos.*;
+import daos.conexion.*;
+import daos.interfaces.PeliculaDAO;
+import daos.interfaces.PersonaDAO;
+import daos.interfaces.ResenaDAO;
+import daos.interfaces.UsuarioDAO;
+import daos.jdbc.PeliculaDAOjdbc;
+import daos.jdbc.PersonaDAOjdbc;
+import daos.jdbc.ResenaDAOjdbc;
+import daos.jdbc.UsuarioDAOjdbc;
 import modelo.audiovisuales.*;
 import modelo.audiovisuales.comparadores.ComparadorPorDuracion;
 import modelo.audiovisuales.comparadores.ComparadorPorGenero;
@@ -16,8 +25,6 @@ import modelo.perfiles.*;
 import modelo.perfiles.comparadores.ComparadorPorEmail;
 import modelo.perfiles.comparadores.ComparadorPorNombreUsuario;
 import modelo.resenas.Resena;
-
-import java.util.Collections;
 
 
 public class Apli {
@@ -57,9 +64,10 @@ public class Apli {
 	}
 	
 	
-	private static void metodoCero(boolean bien) {
+	private static boolean metodoCero(boolean bien) {
 		ConexionBD.getInstancia().desconectarBD();
-		bien = true;
+		return bien = true;
+		
 	}
 		
 	
@@ -158,11 +166,12 @@ public class Apli {
 		int aux = 0;
 		int i = 0;
 		for (i = 0; i < personas.size(); i++) {
-			System.out.print("La persona numero" + i + "Es: ");
+			System.out.print("La persona numero " + i + " es: ");
 		 	System.out.println (personas.get(i).toString());
 		}
 		System.out.println("Ingrese el numero de persona que quiera vincular: ");
 		aux = scanner.nextInt();
+		scanner.nextLine();
 		Persona per = personas.get(aux);
 		while(bla == 0) {
 			while(!var) {
@@ -223,39 +232,39 @@ public class Apli {
 		String resumen = "";
 		Genero[] opciones = Genero.values();
 		while (aux == 0) {
-		System.out.println("Ingrese el titulo de la pelicula");
-		titulo = scanner.nextLine();
-		System.out.println("Ingrese un resumen de la pelicula");
-		resumen = scanner.nextLine();
-		System.out.println("Ingrese el director de la pelicula ");
-		director = scanner.nextLine();
-		System.out.println("Ingrese el elenco de la pelicula");
-		elenco = scanner.nextLine();
-		System.out.println("Ingrese las horas totales de la pelicula");
-		long horas = scanner.nextLong();
-        Duration d3 = Duration.ofHours(horas);
-		System.out.println("Ingrese los minutos restantes de la pelicula");
-		long minutos = scanner.nextLong();
-        Duration d2 = Duration.ofMinutes(minutos);
-		System.out.println("Ingrese los segundos restantes de la pelicula");
-		long segundos = scanner.nextLong();
-        Duration d1 = Duration.ofSeconds(segundos);
-        total = d1.plus(d2).plus(d3);
-        while (!ayuda) {
-        System.out.println("Eliga el genero de la pelicula: ");
-        for (int i = 0; i < opciones.length; i++) {
-            System.out.println((i + 1) + ". " + opciones[i]); 
-        }
-        int auxiliar = scanner.nextInt();
-        auxiliar --;
-        if ((auxiliar >= 0) && (auxiliar < opciones.length) ) {
-        	genero = opciones[auxiliar];
-        	ayuda = true;
-        }
-        else {
-        	   System.out.println("El numero ingresado no es valido");
-        }
-        }
+			System.out.println("Ingrese el titulo de la pelicula");
+			titulo = scanner.nextLine();
+			System.out.println("Ingrese un resumen de la pelicula");
+			resumen = scanner.nextLine();
+			System.out.println("Ingrese el director de la pelicula ");
+			director = scanner.nextLine();
+			System.out.println("Ingrese el elenco de la pelicula");
+			elenco = scanner.nextLine();
+			System.out.println("Ingrese las horas totales de la pelicula");
+			long horas = scanner.nextLong();
+				Duration d3 = Duration.ofHours(horas);
+			System.out.println("Ingrese los minutos restantes de la pelicula");
+			long minutos = scanner.nextLong();
+	        Duration d2 = Duration.ofMinutes(minutos);
+			System.out.println("Ingrese los segundos restantes de la pelicula");
+			long segundos = scanner.nextLong();
+	        Duration d1 = Duration.ofSeconds(segundos);
+	        total = d1.plus(d2).plus(d3);
+	        while (!ayuda) {
+		        System.out.println("Eliga el genero de la pelicula: ");
+		        for (int i = 0; i < opciones.length; i++) {
+		        	System.out.println((i + 1) + ". " + opciones[i]); 
+		        }
+		        int auxiliar = scanner.nextInt();
+		        auxiliar --;
+		        if ((auxiliar >= 0) && (auxiliar < opciones.length) ) {
+		        	genero = opciones[auxiliar];
+		        	ayuda = true;
+		        }
+		        else {
+		        	System.out.println("El numero ingresado no es valido");
+		        }
+	        }
         System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n titulo: " + titulo + 
 				"\n director: " + director + "\n resumen: '" + resumen + "' \n elenco: " + elenco + "\n horas totales: " + total + "\n genero: " + genero );	
 		aux = scanner.nextInt();
@@ -351,6 +360,7 @@ public class Apli {
 				validacion = true;
 				break;
 			}
+			else System.out.println("Datos ingresador incorrectos.");
 		}
 		if (validacion) {
 			List<Pelicula> peliculas  = pe.listarPeliculas();
@@ -362,15 +372,15 @@ public class Apli {
 	            System.out.println((j + 1) + ". " + peliculas.get(j)); 
 	        }
 			while (validacion) {
-			 System.out.println("Eliga la pelicula: ");
-			 j = scanner.nextInt();
-			 if ((j >= 0) && (j < peliculas.size()) ) {
-				 validacion = false;
-				 peli = peliculas.get(j);
-			 }
-			 else {
-				 System.out.println("El numero ingresado no es valido"); 
-			 }
+				System.out.println("Seleccione el numero de la pelicula a reseñar: ");
+				j = scanner.nextInt();
+				if ((j > 0) && (j <= peliculas.size()) ) {
+					validacion = false;
+					peli = peliculas.get((j-1));
+				}
+				else {
+					System.out.println("El numero ingresado no es valido"); 
+				}
 			}
 			j = 0;
 			while(j == 0) {
@@ -384,6 +394,7 @@ public class Apli {
 						esta = true;
 					}
 				}
+				scanner.nextLine();
 				System.out.println("Ingrese la resena de la pelicula: ");
 				texto = scanner.nextLine();
 				System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n su resena es: " + texto + 

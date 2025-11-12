@@ -46,6 +46,6 @@ public abstract class Perfil {
 
 	@Override
 	public String toString() {
-		return "Datos del perfil: email=" + email + ", contrasena=" + contrasena + ", nombreUsuario=" + nombreUsuario;
+		return "email: " + email + ", contrasena: " + contrasena + ", nombreUsuario: " + nombreUsuario;
 	}
 }

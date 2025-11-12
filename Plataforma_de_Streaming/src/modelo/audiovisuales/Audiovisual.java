@@ -351,8 +351,8 @@ public abstract class Audiovisual {
 	
 	 @Override
 		public String toString() {
-			return "Audiovisual [titulo=" + titulo + ", resumen=" + resumen + ", elenco=" + elenco + 
-					", director=" + director + ", genero=" + genero + ", duracion=" + duracion + "]";
+			return "titulo:" + titulo + ", resumen: " + resumen + ", elenco: " + elenco + 
+					", director: " + director + ", genero: " + genero + ", duracion: " + duracion;
 		}
 
 }

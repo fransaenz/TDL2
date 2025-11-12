@@ -1,8 +1,10 @@
-package daos;
+package daos.jdbc;
 
 import java.sql.*;
 import java.util.List;
 
+import daos.conexion.ConexionBD;
+import daos.interfaces.UsuarioDAO;
 import modelo.perfiles.Usuario;
 
 import java.util.LinkedList;
@@ -30,21 +32,6 @@ public class UsuarioDAOjdbc implements UsuarioDAO{
 		} catch (SQLException e) {
             System.err.println("❌ Error al insertar usuario: " + e.getMessage());
 		}
-		
-		//actualizo perfil de la persona
-		
-		SQL = "UPDATE DATOS_PERSONALES (ID_USUARIO) WHERE ID = ";
-		try {
-			PreparedStatement p_stmt = conexion.prepareStatement(SQL);
-			p_stmt.setString();
-			p_stmt.executeUpdate();
-			p_stmt.close();
-		} catch (SQLException e) {
-            System.err.println("❌ Error al insertar usuario: " + e.getMessage());
-		} 
-		
-		
-		
 	}
 	
 	public List<Usuario> listarUsuarios() {
@@ -58,9 +45,9 @@ public class UsuarioDAOjdbc implements UsuarioDAO{
 			Usuario usuario;
 			while(resul.next()) {
 				usuario = new Usuario(
-						resul.getString("NOMBRE_USUARIO"),
 						resul.getString("EMAIL"),
-						resul.getString("CONTRASENA")
+						resul.getString("CONTRASENA"),
+						resul.getString("NOMBRE_USUARIO")
 				);
 				listaUsuarios.addLast(usuario);
 			}

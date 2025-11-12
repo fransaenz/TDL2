@@ -1,8 +1,10 @@
-package daos;
+package daos.jdbc;
 
 import java.sql.*;
 import java.util.List;
 
+import daos.conexion.ConexionBD;
+import daos.interfaces.PeliculaDAO;
 import modelo.audiovisuales.Pelicula;
 import modelo.audiovisuales.util.Genero;
 

@@ -1,8 +1,10 @@
-package daos;
+package daos.jdbc;
 
 import java.sql.*;
 import java.util.List;
 
+import daos.conexion.ConexionBD;
+import daos.interfaces.PersonaDAO;
 import modelo.perfiles.Persona;
 import modelo.perfiles.Usuario;
 
@@ -21,7 +23,7 @@ public class PersonaDAOjdbc implements PersonaDAO{
 
 	public void insertar(Persona persona) {
 		
-		String SQL = "INSERT INTO DATOS_PERSONALES (NOMBRE, APELLIDO, DNI, NRO_TARJETA) VALUES (?, ?, ?, ?)";
+		String SQL = "INSERT INTO DATOS_PERSONALES (NOMBRE, APELLIDO, DNI, NRO_TARJETA, ID_USUARIO) VALUES (?, ?, ?, ?, ?)";
 		
 		try {
 			PreparedStatement p_stmt = conexion.prepareStatement(SQL);
@@ -29,11 +31,18 @@ public class PersonaDAOjdbc implements PersonaDAO{
 	        p_stmt.setString(2, persona.getApellido());
 	        p_stmt.setInt(3, persona.getDni());
 	        p_stmt.setInt(4, persona.getNroTarjeta());
+	        // si la persona aún no tiene usuario asociado → insertar NULL
+	        if (persona.getPerfil() == null) {
+	            p_stmt.setNull(5, java.sql.Types.INTEGER);
+	        } else {
+	            p_stmt.setInt(5, persona.getPerfil().getId());
+	        }
 			p_stmt.executeUpdate();
 			p_stmt.close();
 		} catch (SQLException e) {
             System.err.println("❌ Error al insertar datos personales: " + e.getMessage());
 		}
+		
 	}
 
 	public List<Persona> listarPersonas(){

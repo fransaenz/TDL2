@@ -159,7 +159,7 @@ public class Usuario extends Perfil {
 	
 	@Override
 	public String toString() {
-		return "Datos del usuario pais=" + pais + ", preferencia=" + preferencia + ", idioma=" + idioma + " y los " + super.toString();
+		return "ID de usuario: " + id + ", " + super.toString();
 	}
    
 }

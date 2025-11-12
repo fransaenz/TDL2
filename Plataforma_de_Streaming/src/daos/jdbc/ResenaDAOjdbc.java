@@ -1,8 +1,10 @@
-package daos;
+package daos.jdbc;
 
 import java.sql.*;
 import java.util.List;
 
+import daos.conexion.ConexionBD;
+import daos.interfaces.ResenaDAO;
 import modelo.audiovisuales.Pelicula;
 import modelo.perfiles.Usuario;
 import modelo.resenas.Resena;
