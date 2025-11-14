@@ -46,9 +46,14 @@ public class Apli {
 			System.out.println("Si desea aprobar una resenia ingrese 7");
 			System.out.println("Si desea salir ingrese 0");
 		
+			while (!scanner.hasNextInt()) {
+	            System.out.println("Error: debe ingresar un numero entero.");
+	            scanner.next(); 
+	            System.out.println("Ingrese el numero de la opcion que quiere");
+	        }
 			int var = scanner.nextInt();
 			switch(var) {
-				case 0 -> metodoCero(bien);
+				case 0 -> bien = metodoCero();
 				case 1 -> registrarDatosPersonales(scanner);
 				case 2 -> registrarUsuario(scanner);
 				case 3 -> registrarPelicula(scanner);
@@ -64,9 +69,9 @@ public class Apli {
 	}
 	
 	
-	private static boolean metodoCero(boolean bien) {
+	private static boolean metodoCero() {
 		ConexionBD.getInstancia().desconectarBD();
-		return bien = true;
+		return true;
 		
 	}
 		
@@ -80,7 +85,7 @@ public class Apli {
 		int nroTarjeta = 0;
 		boolean valido = false;
 		PersonaDAO p = new PersonaDAOjdbc();
-		while (aux == 0) {
+		while (aux != 1) {
 			valido = false;
 			while (!valido) {
 				System.out.println("Ingrese el nombre");
@@ -128,6 +133,11 @@ public class Apli {
 			
 			while(!valido) {
 				System.out.println("Ingrese el DNI");
+				while (!scanner.hasNextInt()) {
+		            System.out.println("Error: debe ingresar un numero entero.");
+		            scanner.next(); 
+		            System.out.println("Ingrese el DNI");
+		        }
 				dni = scanner.nextInt();
 				if(p.existeDNI(dni)){ valido = true;}
 				if (valido) {
@@ -140,12 +150,24 @@ public class Apli {
 				}
 			}
 			System.out.println("Ingrese el numero de la tarjeta");
-			nroTarjeta = scanner.nextInt();
+			while (!scanner.hasNextInt()) {
+	            System.out.println("Error: debe ingresar un numero entero.");
+	            scanner.next(); 
+	            System.out.println("Ingrese el numero de la tarjeta");
+	        }
+
+	        nroTarjeta = scanner.nextInt();
 		System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n nombre: " + nombre + 
 				"\n apellido: " + apellido + "\n DNI: " + dni + "\n nro de la tarjeta: " + nroTarjeta);	
+		while (!scanner.hasNextInt()) {
+            System.out.println("Error: debe ingresar un numero entero.");
+            scanner.next(); 
+            System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n nombre: " + nombre + 
+    				"\n apellido: " + apellido + "\n DNI: " + dni + "\n nro de la tarjeta: " + nroTarjeta);
+        }
 		aux = scanner.nextInt();
 		scanner.nextLine();
-		} 
+		}
 		Persona per = new Persona (nombre, apellido, dni, nroTarjeta);
 		p.insertar(per);
 	}
@@ -174,6 +196,11 @@ public class Apli {
 		 	System.out.println (personas.get(i).toString());
 		}
 		System.out.println("Ingrese el numero de persona que quiera vincular: ");
+		while (!scanner.hasNextInt()) {
+            System.out.println("Error: debe ingresar un numero entero.");
+            scanner.next(); 
+            System.out.println("Ingrese el numero de persona que quiera vincular: ");
+        }
 		aux = scanner.nextInt();
 		scanner.nextLine();
 		aux--;
@@ -238,7 +265,7 @@ public class Apli {
 		boolean ayuda = false;
 		String resumen = "";
 		Genero[] opciones = Genero.values();
-		while (aux == 0) {
+		while (aux != 1) {
 			System.out.println("Ingrese el titulo de la pelicula");
 			titulo = scanner.nextLine();
 			System.out.println("Ingrese un resumen de la pelicula");
@@ -248,12 +275,27 @@ public class Apli {
 			System.out.println("Ingrese el elenco de la pelicula");
 			elenco = scanner.nextLine();
 			System.out.println("Ingrese las horas totales de la pelicula");
+			while (!scanner.hasNextLong()) {
+	            System.out.println("Error: debe ingresar un numero entero.");
+	            scanner.next(); 
+	            System.out.println("Ingrese las horas totales de la pelicula");
+	        }
 			long horas = scanner.nextLong();
 				Duration d3 = Duration.ofHours(horas);
 			System.out.println("Ingrese los minutos restantes de la pelicula");
+			while (!scanner.hasNextLong()) {
+	            System.out.println("Error: debe ingresar un numero entero.");
+	            scanner.next(); 
+	            System.out.println("Ingrese los minutos restantes de la pelicula");
+	        }
 			long minutos = scanner.nextLong();
 	        Duration d2 = Duration.ofMinutes(minutos);
 			System.out.println("Ingrese los segundos restantes de la pelicula");
+			while (!scanner.hasNextLong()) {
+	            System.out.println("Error: debe ingresar un numero entero.");
+	            scanner.next(); 
+	            System.out.println("Ingrese los segundos restantes de la pelicula");
+	        }
 			long segundos = scanner.nextLong();
 	        Duration d1 = Duration.ofSeconds(segundos);
 	        total = d1.plus(d2).plus(d3);
@@ -262,6 +304,11 @@ public class Apli {
 		        System.out.println("Eliga el genero de la pelicula: ");
 		        for (int i = 0; i < opciones.length; i++) {
 		        	System.out.println((i + 1) + ". " + opciones[i]); 
+		        }
+		        while (!scanner.hasNextInt()) {
+		            System.out.println("Error: debe ingresar un numero entero.");
+		            scanner.next(); 
+		            System.out.println("Eliga el genero de la pelicula: ");
 		        }
 		        int auxiliar = scanner.nextInt();
 		        auxiliar --;
@@ -275,7 +322,13 @@ public class Apli {
 	        }
         System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n titulo: " + titulo + 
 				"\n director: " + director + "\n resumen: '" + resumen + "' \n elenco: " + elenco + "\n horas totales: " + total + "\n genero: " + genero );	
-		aux = scanner.nextInt();
+        while (!scanner.hasNextInt()) {
+            System.out.println("Error: debe ingresar un numero entero.");
+            scanner.next(); 
+            System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n titulo: " + titulo + 
+    				"\n director: " + director + "\n resumen: '" + resumen + "' \n elenco: " + elenco + "\n horas totales: " + total + "\n genero: " + genero );
+        }
+        aux = scanner.nextInt();
 		scanner.nextLine();
 		}
 		Pelicula peli = new Pelicula(titulo, director,  elenco, genero, total, resumen);
@@ -294,19 +347,31 @@ public class Apli {
 	        System.out.println("1. Por nombre de usuario");
 	        System.out.println("2. Por email");
 	        System.out.print("Opción: ");
+	        while (!scanner.hasNextInt()) {
+	            System.out.println("Error: debe ingresar un numero entero.");
+	            scanner.next(); 
+	            System.out.print("Opción: ");
+	        }
 	        int opcion = scanner.nextInt();
 
 	        if (opcion == 1) {
 	        	Collections.sort(usuarios, new ComparadorPorNombreUsuario());
+	        	System.out.println("\nUsuarios ordenados:");
+	        	System.out.println("");
+		        for (Usuario usu : usuarios) {
+		            System.out.println(usu);
+		            System.out.println("");
+		        }
 	        } else if (opcion == 2) {
 	        	Collections.sort(usuarios, new ComparadorPorEmail());
+	        	System.out.println("\nUsuarios ordenados:");
+	        	System.out.println("");
+		        for (Usuario usu : usuarios) {
+		            System.out.println(usu);
+		            System.out.println("");
+		        }
 	        } else {
 	            System.out.println("Opción inválida");
-	        }
-
-	        System.out.println("\nUsuarios ordenados:");
-	        for (Usuario usu : usuarios) {
-	            System.out.println(usu);
 	        }
 	
 	}
@@ -324,23 +389,43 @@ public class Apli {
         System.out.println("2. Por genero de la pelicula");
         System.out.println("3. Por duracion de la pelicula");
         System.out.print("Opción: ");
+        while (!scanner.hasNextInt()) {
+            System.out.println("Error: debe ingresar un numero entero.");
+            scanner.next(); 
+            System.out.print("Opción: ");
+        }
         int opcion = scanner.nextInt();
 
         if (opcion == 1) {
         	Collections.sort(peliculas, new ComparadorPorTitulo());
+        	System.out.println("\nPeliculas ordenadas:");
+        	System.out.println("");
+            for (Pelicula p : peliculas) {
+                System.out.println(p);
+                System.out.println("");
+            }
         } else if (opcion == 2) {
         	Collections.sort(peliculas, new ComparadorPorGenero());
+        	System.out.println("\nPeliculas ordenadas:");
+        	System.out.println("");
+            for (Pelicula p : peliculas) {
+                System.out.println(p);
+                System.out.println("");
+            }
         } 
         else if (opcion == 3) {
         	Collections.sort(peliculas, new ComparadorPorDuracion());
+        	System.out.println("\nPeliculas ordenadas:");
+        	System.out.println("");
+            for (Pelicula p : peliculas) {
+                System.out.println(p);
+                System.out.println("");
+            }
         } else {
             System.out.println("Opción inválida");
         }
 
-        System.out.println("\nPeliculas ordenadas:");
-        for (Pelicula p : peliculas) {
-            System.out.println(p);
-        }
+        
 	}
 	
 	private static void registrarResenia(Scanner scanner) {
@@ -369,9 +454,11 @@ public class Apli {
 				validacion = true;
 				break;
 			}
-			else System.out.println("Datos ingresados incorrectos.");
 		}
-		if (validacion) {
+		if (!validacion) {
+		    System.out.println("Datos ingresados incorrectos.");
+		}
+		else {
 			System.out.println("Datos ingresados correctos.");
 			List<Pelicula> peliculas  = pe.listarPeliculas();
 			if (peliculas.size() == 0) {
@@ -383,6 +470,11 @@ public class Apli {
 	        }
 			while (validacion) {
 				System.out.println("Seleccione el numero de la pelicula a reseñar: ");
+				while (!scanner.hasNextInt()) {
+		            System.out.println("Error: debe ingresar un numero entero.");
+		            scanner.next(); 
+		            System.out.println("Seleccione el numero de la pelicula a reseñar: ");
+		        }
 				j = scanner.nextInt();
 				if ((j > 0) && (j <= peliculas.size()) ) {
 					validacion = false;
@@ -397,6 +489,11 @@ public class Apli {
 				esta = false;
 				while (!esta) {
 					System.out.println("Ingrese las estrellas de la pelicula entre 0 y 5: ");
+					while (!scanner.hasNextInt()) {
+			            System.out.println("Error: debe ingresar un numero entero.");
+			            scanner.next(); 
+			            System.out.println("Ingrese las estrellas de la pelicula entre 0 y 5: ");
+			        }
 					estrellas = scanner.nextInt();
 					if ((estrellas > 5) || (estrellas < 0) ) {
 						System.out.println("El numero de estrellas no es valido ");
@@ -410,6 +507,12 @@ public class Apli {
 				texto = scanner.nextLine();
 				System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n su resena es: " + texto + 
 						"\n y le da " + estrellas + " estrellas a la pelicula");	
+				while (!scanner.hasNextInt()) {
+		            System.out.println("Error: debe ingresar un numero entero.");
+		            scanner.next(); 
+		            System.out.println("Si los siguientes datos son correctos ingrese 1, en el caso contrario ingrese 0\n su resena es: " + texto + 
+							"\n y le da " + estrellas + " estrellas a la pelicula");
+		        }
 				j = scanner.nextInt();
 				scanner.nextLine();
 			}
@@ -438,9 +541,14 @@ public class Apli {
         }
 		while (!aux) {
 			System.out.println("Ingrese el numero de resena que desea aprobar: ");
+			while (!scanner.hasNextInt()) {
+	            System.out.println("Error: debe ingresar un numero entero.");
+	            scanner.next(); 
+	            System.out.println("Ingrese el numero de resena que desea aprobar: ");
+	        }
 			j = scanner.nextInt();
 			j--;
-			if ((j > resenas.size()) || (j < 0) ) {
+			if ((j > resenas.size()) || (j < 0) || (resenas.get(j).estaAprobada() != false)) {
 				System.out.println("El numero de resena no es valido ");
 			}
 			else {
@@ -449,6 +557,11 @@ public class Apli {
 		}
 	    System.out.println("La resena seleccionada es la siguiente: " + resenas.get(j)); 
 	    System.out.println("Si la resena que desea aprobar es esa ingrese 1, en el caso contrario ingrese 0");
+	    while (!scanner.hasNextInt()) {
+            System.out.println("Error: debe ingresar un numero entero.");
+            scanner.next(); 
+            System.out.println("Si la resena que desea aprobar es esa ingrese 1, en el caso contrario ingrese 0");
+        }
 	    i = scanner.nextInt();
 	    if (i == 1) {
 	    	if(r.aprobar (resenas.get(j))) {
