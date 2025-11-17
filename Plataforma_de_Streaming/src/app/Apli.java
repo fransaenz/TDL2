@@ -190,10 +190,9 @@ public class Apli {
 		int aux = 0;
 		int i = 0;
 		for (i = 0; i < personas.size(); i++) {
-			i++;
-			System.out.print("La persona numero " + i + " es: ");
-			i--;
-		 	System.out.println (personas.get(i).toString());
+			if (personas.get(i).getPerfil() == null) {
+				System.out.println("La persona numero " + (i+1) + " es: " + personas.get(i).toString());
+			}
 		}
 		System.out.println("Ingrese el numero de persona que quiera vincular: ");
 		while (!scanner.hasNextInt()) {
@@ -235,6 +234,7 @@ public class Apli {
 		} else {
 			System.out.println("El usuario se asigno a la persona correctamente");
 		}
+		
 	}
 	
 	
