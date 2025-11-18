@@ -190,7 +190,7 @@ public class Apli {
 		int aux = 0;
 		int i = 0;
 		for (i = 0; i < personas.size(); i++) {
-			if (personas.get(i).getPerfil() == null) {
+			if (personas.get(i).getPerfil().getId() == 0) {
 				System.out.println("La persona numero " + (i+1) + " es: " + personas.get(i).toString());
 			}
 		}
