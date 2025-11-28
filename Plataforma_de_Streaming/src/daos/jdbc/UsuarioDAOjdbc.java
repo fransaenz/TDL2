@@ -19,19 +19,28 @@ public class UsuarioDAOjdbc implements UsuarioDAO{
 	}
 	
 	
-	public void insertar(Usuario usuario) {
+	public int insertar(Usuario usuario) {
 
 		String SQL = "INSERT INTO USUARIO (NOMBRE_USUARIO, EMAIL, CONTRASENA) VALUES (?, ?, ?)";
-		try {
-			PreparedStatement p_stmt = conexion.prepareStatement(SQL);
+		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)){
 			p_stmt.setString(1, usuario.getNombreUsuario());
 	        p_stmt.setString(2, usuario.getEmail());
 	        p_stmt.setString(3, usuario.getContrasena());
-			p_stmt.executeUpdate();
-			p_stmt.close();
+	        p_stmt.executeUpdate();
+			
+			try(ResultSet keys = p_stmt.getGeneratedKeys()){
+				if (keys.next()) {
+					int id = keys.getInt(1);
+	            	usuario.setId(id);
+	            	return id;
+	        	}
+			}
+			
 		} catch (SQLException e) {
             System.err.println("❌ Error al insertar usuario: " + e.getMessage());
 		}
+		
+		return -1;
 	}
 	
 	public List<Usuario> listarUsuarios() {

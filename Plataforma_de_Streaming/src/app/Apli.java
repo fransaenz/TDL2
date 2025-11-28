@@ -182,7 +182,7 @@ public class Apli {
 		String nombreUsuario = "";
 		boolean var = false;
 		int bla = 0;
-		List<Persona> personas  = p.listarPersonas();
+		List<Persona> personas  = p.listarPersonasSinUsuario();
 		if (personas.size() == 0) {
 			System.out.println("Error, no hay personas registradas.");
 			return;
@@ -190,9 +190,7 @@ public class Apli {
 		int aux = 0;
 		int i = 0;
 		for (i = 0; i < personas.size(); i++) {
-			if (personas.get(i).getPerfil().getId() == 0) {
-				System.out.println("La persona numero " + (i+1) + " es: " + personas.get(i).toString());
-			}
+			System.out.println("La persona numero " + (i+1) + " es: " + personas.get(i).toString());
 		}
 		System.out.println("Ingrese el numero de persona que quiera vincular: ");
 		while (!scanner.hasNextInt()) {
@@ -227,10 +225,17 @@ public class Apli {
 		scanner.nextLine();
 		}
 		Usuario usu = new Usuario(email, contrasena, nombreUsuario);
+		
+		int idGenerado = u.insertar(usu);
+		
+		if (idGenerado == -1) {
+		    System.out.println("❌ Error al insertar usuario.");
+		    return;
+		}
+		
 		if(p.actualizarUsuario(usu, per))
 		{
 			System.out.println("El usuario se asigno a la persona correctamente");
-			u.insertar(usu);
 		} else {
 			System.out.println("El usuario se asigno a la persona correctamente");
 		}

@@ -44,11 +44,11 @@ public class PersonaDAOjdbc implements PersonaDAO{
 		}
 		
 	}
-
-	public List<Persona> listarPersonas(){
+//lista personas sin usuario asignado
+	public List<Persona> listarPersonasSinUsuario(){
 		
 		List<Persona> listaPersonas = new LinkedList<Persona>();
-		String SQL= "SELECT * FROM DATOS_PERSONALES";
+		String SQL= "SELECT * FROM DATOS_PERSONALES WHERE ID_USUARIO IS NULL";
 		
 		try (Statement stmt = conexion.createStatement();
 			 ResultSet resul = stmt.executeQuery(SQL))
@@ -83,7 +83,7 @@ public class PersonaDAOjdbc implements PersonaDAO{
 			return filas >0;
 			
 		} catch (SQLException e) {
-			System.err.println("❌ Error al verificar si existe el dni: " + e.getMessage());
+			System.err.println("❌ Error al actualizar el usuario: " + e.getMessage());
 			return false;
 		}
 	}

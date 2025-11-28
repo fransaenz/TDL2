@@ -9,7 +9,7 @@ public interface PersonaDAO {
 
 	void insertar(Persona persona); //use
 
-    List<Persona> listarPersonas(); //use
+    List<Persona> listarPersonasSinUsuario(); //use
 
     boolean actualizarUsuario(Usuario usuario, Persona persona); //use
 
