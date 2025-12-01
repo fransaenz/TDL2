@@ -54,7 +54,10 @@ public class ConexionBD {
               "GENERO TEXT(100) NOT NULL, " +
               "DURACION INTEGER NOT NULL, " +
               "ELENCO TEXT(500) NOT NULL, " +
-              "RESUMEN TEXT(500) NOT NULL" +
+              "RESUMEN TEXT(500) NOT NULL," +
+              "ESTRELLAS_PROMEDIO REAL NOT NULL," +
+              "ANIO INTEGER NOT NULL," +
+              "POSTER TEXT(500) NOT NULL" +
               ");";
       stmt.executeUpdate(sql);
 
