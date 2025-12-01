@@ -30,6 +30,12 @@ public class Pelicula extends Audiovisual{
     
     /** Lista de todas las secuelas de la Pelicula */
     private List<Pelicula> ListaSecuelas;
+    
+    private float estrellasPromedio;
+    
+    private int anio;
+    
+    private String poster;
 
 	 /**
      * Crea una nueva instancia de Pelicula.
@@ -87,6 +93,13 @@ public class Pelicula extends Audiovisual{
 			Duration duracion, String resumen) {
 		super(titulo, director, elenco, genero, duracion, resumen);
 		
+	}
+	
+	public Pelicula(String titulo, String director, String elenco, Genero genero,
+			Duration duracion, String resumen, int anio, String poster) {
+		super(titulo, director, elenco, genero, duracion, resumen);
+		this.anio = anio;
+		this.poster= poster;
 	}
 	
 	public int getId() {
@@ -155,7 +168,31 @@ public class Pelicula extends Audiovisual{
 
 
 
-    /**
+    public float getEstrellasPromedio() {
+		return estrellasPromedio;
+	}
+
+	public void setEstrellasPromedio(float estrellasPromedio) {
+		this.estrellasPromedio = estrellasPromedio;
+	}
+
+	public int getAnio() {
+		return anio;
+	}
+
+	public void setAnio(int anio) {
+		this.anio = anio;
+	}
+
+	public String getPoster() {
+		return poster;
+	}
+
+	public void setPoster(String poster) {
+		this.poster = poster;
+	}
+
+	/**
      * Establece una precuela de la pelicula
      * 
      */
