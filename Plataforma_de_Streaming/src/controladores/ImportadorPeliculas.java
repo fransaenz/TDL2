@@ -1,4 +1,4 @@
-package controlador;
+package controladores;
 
 import modelo.audiovisuales.Pelicula;
 import daos.interfaces.PeliculaDAO;
