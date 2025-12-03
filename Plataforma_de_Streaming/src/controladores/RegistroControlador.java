@@ -4,15 +4,18 @@ import gui.VistaRegistro;
 
 import java.util.List;
 
+import daos.interfaces.PersonaDAO;
 import daos.interfaces.UsuarioDAO;
 import daos.jdbc.*;
-import modelo.perfiles.Usuario;
+import modelo.perfiles.*;
 
 public class RegistroControlador {
 
+	
+	
     // 1) Referencias a la vista y al modelo (DAO)
     private VistaRegistro vista;
-    private UsuarioDAO u;
+    private UsuarioDAO u; //Este dato y los metodos en los que lo uso tienen que ir a modelo
 
     // 2) Constructor: recibe la vista que controla
     public RegistroControlador(VistaRegistro vista) {
@@ -30,16 +33,10 @@ public class RegistroControlador {
         String nombreUsuario = vista.getNombreUsuario();
         String email = vista.getEmail();
         String password = vista.getPassword();
-        String password2 = vista.getPasswordRepetida();
 
         // 6) Validaciones (muy básicas)
-        if (nombreUsuario.isBlank() || email.isBlank() || password.isBlank() || password2.isBlank()) {
+        if (nombreUsuario.isBlank() || email.isBlank() || password.isBlank()) {
             vista.mostrarMensaje("Todos los campos deben estar completos.");
-            return;
-        }
-
-        if (!password.equals(password2)) {
-            vista.mostrarMensaje("Las contraseñas no coinciden.");
             return;
         }
 
@@ -68,5 +65,39 @@ public class RegistroControlador {
 
         // 10) Cerramos la ventana de registro y volvemos a la VistaLogin
         vista.cerrar();
+    }
+    
+    // Tengo que sumar el metodo registrarUsuario(email, usuario, pass); Copiar el mismo que del main anterior
+    
+    	public boolean registrarUsuario (String email, String nombreUsuario, String contrasena, String nombre, String apellido, int dni, int nroTarjeta) {
+    	Usuario usu = new Usuario(email, contrasena, nombreUsuario);
+    	PersonaDAO p = new PersonaDAOjdbc();
+		u.insertar(usu);
+		Persona per = new Persona (nombre,apellido, dni,nroTarjeta, usu);
+		p.insertar(per);
+		
+		return p.actualizarUsuario(usu, per);
+    	}
+    
+    public boolean validarEmail (String email) {
+    	boolean var = false;
+		if (esEmailBasico(email)) {
+			var = true;	            
+		}
+		return var;
+    }
+    
+    public static boolean esEmailBasico(String email) {
+        int arroba = email.indexOf('@');
+        int ultimaArroba = email.lastIndexOf('@');
+        
+        if (arroba == -1 || arroba != ultimaArroba) {
+            return false;
+        }
+
+        String antes = email.substring(0, arroba);
+        String despues = email.substring(arroba + 1);
+
+        return !antes.isEmpty() && !despues.isEmpty();
     }
 }

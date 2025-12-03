@@ -1,9 +1,7 @@
 package gui;
 
 import controladores.MainControlador;
-import exceptions.CamposVaciosException;
-import exceptions.EmailInvalidoException;
-import exceptions.UsuarioNoEncontradoException;
+import excepciones.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +11,8 @@ public class VistaLogin extends JFrame {
     private JTextField txtEmail;
     private JPasswordField txtPassword;
     private JLabel lblMensaje;
+    private JButton btnLogin;
+    private JButton btnRegistro;
 
     public VistaLogin() {
 
@@ -47,8 +47,8 @@ public class VistaLogin extends JFrame {
 
         // PANEL DE BOTONES
         JPanel panelBotones = new JPanel(new FlowLayout());
-        JButton btnLogin = new JButton("Ingresar");
-        JButton btnRegistro = new JButton("Registrarse");
+        btnLogin = new JButton("Ingresar");
+        btnRegistro = new JButton("Registrarse");
 
         panelBotones.add(btnLogin);
         panelBotones.add(btnRegistro);
@@ -86,7 +86,7 @@ public class VistaLogin extends JFrame {
             }
 
             // 3) LLAMAMOS AL CONTROLADOR
-            var usuario = MainController.getInstance().login(email, pass);
+            var usuario = MainControlador.getInstance().login(email, pass);
 
             // 4) SI VOLVIÓ NULO → USUARIO NO EXISTE
             if (usuario == null) {
@@ -95,7 +95,7 @@ public class VistaLogin extends JFrame {
 
             // 5) LOGIN EXITOSO
             lblMensaje.setText("Acceso concedido.");
-            new HomeView();
+            new VistaPrincipal();
             dispose();
 
         } catch (CamposVaciosException | EmailInvalidoException | UsuarioNoEncontradoException ex) {
@@ -106,5 +106,46 @@ public class VistaLogin extends JFrame {
                     "Ocurrió un error inesperado: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    // Mostrar mensajes informativos
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // Mostrar errores
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Limpiar los campos de texto
+    public void limpiarCampos() {
+        txtEmail.setText("");
+        txtPassword.setText("");
+    }
+
+    // Cerrar la ventana actual
+    public void salir() {
+        dispose();
+    }
+    
+    public String getCampoEmail() {
+        return txtEmail.getText().trim();
+    }
+
+    public String getCampoPassword() {
+        return new String(txtPassword.getPassword()).trim();
+    }
+    
+    public void cerrar() {
+        this.dispose();
+    }
+    
+    public JButton getBtnLogin() {
+        return btnLogin;
+    }
+
+    public JButton getBtnRegistro() {
+        return btnRegistro;
     }
 }
