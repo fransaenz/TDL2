@@ -2,6 +2,8 @@ package controladores;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import daos.interfaces.UsuarioDAO;
 import daos.jdbc.UsuarioDAOjdbc;
 import gui.*;
@@ -10,22 +12,20 @@ import modelo.perfiles.Usuario;
 public class LoginControlador {
 
     private VistaLogin vista;
-    private UsuarioService usuarioService;
 
     public LoginControlador(VistaLogin vista) {
         this.vista = vista;
-        this.usuarioService = new UsuarioService();
         inicializarEventos();
     }
 
     private void inicializarEventos() {
-        vista.getBtnLogin().setOnAction(e -> manejarLogin());
-        vista.getBtnRegistro().setOnAction(e -> abrirRegistro());
+    	vista.getBtnLogin().addActionListener(e -> manejarLogin());
+    	vista.getBtnRegistro().addActionListener(e -> abrirRegistro());
     }
 
     private void manejarLogin() {
-        String email = vista.getCampoEmail().getText();
-        String password = vista.getCampoPassword().getText();
+        String email = vista.getCampoEmail();
+        String password = vista.getCampoPassword();
 
         if (email.isEmpty() || password.isEmpty()) {
             vista.mostrarError("Debe completar todos los campos.");
@@ -47,13 +47,13 @@ public class LoginControlador {
             return;
         }
 
-        if (!encontrado.getPassword().equals(password)) {
+        if (!encontrado.getContrasena().equals(password)) {
             vista.mostrarError("Contraseña incorrecta.");
             return;
         }
 
         vista.mostrarMensaje("Inicio de sesión exitoso.");
-        new VistaBienvenida(encontrado).mostrar();
+        new VistaPrincipal(encontrado).mostrar();
         vista.cerrar();
     }
 
@@ -62,4 +62,6 @@ public class LoginControlador {
         registro.mostrar();
         vista.cerrar();
     }
+    
+ 
 }

@@ -1,14 +1,14 @@
 package controladores;
 
 import javax.swing.SwingUtilities;
-import controladores.LoginControlador;
-import gui.*;
+import gui.VistaLogin;
 
 public class MainControlador {
     public static void main(String[] args) {
-        // Iniciar la UI en el EDT
         SwingUtilities.invokeLater(() -> {
-            new LoginControlador();
+            VistaLogin vista = new VistaLogin();   // Crear la vista
+            new LoginControlador(vista);           // Pasar la vista al controlador
+            vista.setVisible(true);                // Mostrar la vista
         });
     }
 }
