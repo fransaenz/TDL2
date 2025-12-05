@@ -1,5 +1,19 @@
 package modelo.audiovisuales.util;
 
 public enum Genero {
-	ACCION, AVENTURA, COMEDIA, DRAMA, FANTASIA, ROMANCE, SUSPENSO, TERROR, CIENCIA_FICCION
+    ACCION,
+    ANIMADA,
+    AVENTURA,
+    CIENCIA_FICCION,
+    COMEDIA,
+    DRAMA,
+    FAMILIA,
+    FANTASIA,
+    GUERRA,
+    HORROR,
+    MISTERIO,
+    MUSICA,
+    POLICIAL,
+    THRILLER,
+    DESCONOCIDO
 }

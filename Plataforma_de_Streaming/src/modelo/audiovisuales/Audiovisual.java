@@ -129,6 +129,13 @@ public abstract class Audiovisual {
 	}*/
 
 
+	public Audiovisual ( String titulo, String resumen, Genero genero) {
+		this.titulo = titulo;
+		this.resumen= resumen;
+		this.genero = genero;
+	}
+
+
 	/**
      * Devuelve la lista de paises donde esta restringido el audiovisual
      * 
@@ -351,8 +358,7 @@ public abstract class Audiovisual {
 	
 	 @Override
 		public String toString() {
-			return "titulo:" + titulo + ", resumen: " + resumen + ", elenco: " + elenco + 
-					", director: " + director + ", genero: " + genero + ", duracion: " + duracion;
+			return "titulo:" + titulo + ", resumen: " + resumen +  ", genero: " + genero ;
 		}
 
 }

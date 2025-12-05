@@ -1,127 +1,187 @@
 package controladores;
 
 import modelo.audiovisuales.Pelicula;
+import modelo.audiovisuales.util.Genero;
 import daos.interfaces.PeliculaDAO;
 import daos.jdbc.PeliculaDAOjdbc;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.Comparator;
-import java.util.regex.Pattern;
-
 import excepciones.CsvImportException;
+
+import java.time.LocalDate;
+
 
 public class ImportadorPeliculas {
 
 	public static final List<Pelicula> peliculasEnMemoria = new ArrayList<>();
+
+	public static void importarCSV(String rutaCsv) throws CsvImportException, FileNotFoundException, IOException {
+		
+		peliculasEnMemoria.clear();
+		
+		List<String> errores = new ArrayList<>();
+	        
+		
+	    try (BufferedReader br = new BufferedReader(new FileReader(rutaCsv))){
+	       
+	    	String linea = br.readLine(); //leo y descarto la primera linea, es decir el encabezado, que no tiene datos
+	        
+	    	PeliculaDAO pDao = new PeliculaDAOjdbc();
+	    	
+	    	int nroLinea = 1;
+	    	
+	    	while ((linea = br.readLine()) != null) {
+	    		
+	    		nroLinea++;
+	    		
+	    		try {
+	    		
+	    			List<String> campos = splitearLineaCSV(linea);
+	    		
+	    			if (campos.size() < 9) {
+	    				throw new CsvImportException("Error de formato: se esperaban 9 columnas pero llegaron "
+	    				+ campos.size() + ". Línea: " + linea);
+	    			}
+	    		
+	    			String releaseDate  = campos.get(0);
+	    			String title        = campos.get(1);
+	    			String overview     = campos.get(2);
+	    			String popularity   = campos.get(3);
+	    			String voteCount    = campos.get(4);
+	    			String voteAverage  = campos.get(5);
+	    			String language     = campos.get(6);
+	    			String genre        = campos.get(7);
+	    			String poster       = campos.get(8);
+	        
+	    			String primerGenero = genre.split(",")[0].trim(); //elijo el primer genero
+	        
+	    			int anio;
+	    			try {
+	    				anio = LocalDate.parse(releaseDate).getYear();
+	    			} catch (Exception e) {
+	    				throw new CsvImportException("Línea " + nroLinea + ": Fecha inválida (" + releaseDate + ")", e);
+	    			}
+	            
+	    			float ratingPromedio;
+	    			try {
+	    				ratingPromedio = Float.parseFloat(voteAverage);
+	    			} catch (Exception e) {
+	    				throw new CsvImportException("Línea " + nroLinea + ": Rating inválido: " + voteAverage + ")", e);
+	    			}
+	            
+	    			Genero genero = convertirGenero(primerGenero);
+	            
+	    			Pelicula p = new Pelicula(anio, title, overview, ratingPromedio, genero, poster); //no uso popularity, voteCount ni language porque no son necesarios
+
+	    			pDao.insertar(p);     		// guardo pelicula en la BD
+	    			peliculasEnMemoria.add(p);  // guardo pelicula en la memoria
+	    		
+	    		} catch (CsvImportException e){
+	    			errores.add(e.getMessage());
+	    		}
+	    	}
+	    }
+	    ordenarPorRatingDesc();
+	    
+	    if (!errores.isEmpty()) {
+	        System.out.println("Errores detectados durante la importación:");
+	        errores.forEach(System.out::println);
+	    }
+	}
+
+	private static List<String> splitearLineaCSV(String linea) {
+	    List<String> campos = new ArrayList<>();
+	    char[] chars = linea.toCharArray(); //convierto la linea en vector de char
+
+	    boolean dentroComillas = false; 
+	    String campo = ""; 
+	    
+	    for (char c : chars) 
+	    { 
+	    	
+            if (c == '"')  //si el caracter actual son comillas
+            {
+                dentroComillas = !dentroComillas; // cambio el valor de dentroComillas
+            }
+            
+            else if (c == ',' && !dentroComillas)  //si estamos en una coma y no entre comillas
+            {
+            	campos.add(campo); //agrego el campo
+                campo = ""; //reinicio campo   
+            }
+            
+            else //si sigo dentro de las comillas
+            {
+                campo += c; // concateno caracter al campo actual
+            }
+            
+        }
+
+        campos.add(campo); // último campo
+        return campos;
+	}
+
 	
-	private static final Pattern CSV_SPLIT_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+	private static Genero convertirGenero(String texto) {
 
-	 public static void importarCSV(String rutaCsv) throws CsvImportException {
-	        peliculasEnMemoria.clear();
-	        Path path = Path.of(rutaCsv);
-	        try (BufferedReader br = new BufferedReader(new FileReader(path.toFile()))) {
+	    texto = texto.trim().toLowerCase();
 
-	            String linea;
-	            boolean primera = true;
-	            while ((linea = br.readLine()) != null) {
-	                // Saltar encabezado (primera línea)
-	                if (primera) { primera = false; continue; }
-	                if (linea.isBlank()) continue;
+	    switch (texto) {
 
-	                // Split respetando comillas
-	                String[] campos = CSV_SPLIT_PATTERN.split(linea, -1);
+	        case "action"		   : return Genero.ACCION;
 
-	                // Validamos que tengamos al menos 9 campos según el CSV proporcionado
-	                if (campos.length < 9) {
-	                    // se lanza excepción propia con info útil
-	                    throw new CsvImportException("Línea con formato inválido (campos menores a 9): " + linea);
-	                }
+	        case "animation"	   : return Genero.ANIMADA;
 
-	                // Mapear campos (índices basados en movies_database.csv)
-	                String releaseDate = campos[0].trim();
-	                String title       = quitarComillas(campos[1]).trim();
-	                String overview    = quitarComillas(campos[2]).trim();
-	                String popularity  = campos[3].trim();
-	                String voteCount   = campos[4].trim();
-	                String voteAverage = campos[5].trim();
-	                String language    = campos[6].trim();
-	                String genre       = quitarComillas(campos[7]).trim();
-	                String poster      = quitarComillas(campos[8]).trim();
+	        case "adventure"	   : return Genero.AVENTURA;
 
-	                // Adaptar género: tomar primer género si hay varios
-	                String generoFinal = "Sin Género";
-	                if (!genre.isBlank()) {
-	                    String[] gParts = genre.split(",");
-	                    generoFinal = gParts[0].trim();
-	                }
+	        case "science fiction" : return Genero.CIENCIA_FICCION;
 
-	                // Extraer año (Release_Date formato YYYY-MM-DD). Si falla, dejamos 0 (nullable lógico).
-	                int anio = 0;
-	                try {
-	                    if (releaseDate != null && releaseDate.length() >= 4) {
-	                        anio = Integer.parseInt(releaseDate.substring(0, 4));
-	                    }
-	                } catch (NumberFormatException ignored) {
-	                    anio = 0;
-	                }
+	        case "comedy" 		   : return Genero.COMEDIA;
 
-	                // Parsear rating (Vote_Average)
-	                float rating = 0f;
-	                try {
-	                    if (!voteAverage.isBlank()) rating = Float.parseFloat(voteAverage);
-	                } catch (NumberFormatException ignored) {
-	                    rating = 0f;
-	                }
+	        case "drama"  		   : return Genero.DRAMA;
 
-	                // Crear la entidad Pelicula (asegurate que tu model.Pelicula tenga este constructor)
-	                Pelicula p = new Pelicula(title, generoFinal, rating, anio, poster);
+	        case "family"		   : return Genero.FAMILIA;
 
-	                // Persistir con DAO (usa PreparedStatement dentro del DAO; DAO debe manejar SQLExceptions)
-	                try {
-	                    PeliculaDAO.insertar(p);
-	                } catch (Exception daoEx) {
-	                    // Si falla persistencia, encapsulamos y lanzamos CsvImportException
-	                    throw new CsvImportException("Error al insertar película en BD: " + title, daoEx);
-	                }
+	        case "fantasy"		   : return Genero.FANTASIA;
 
-	                // Añadir a la caché en memoria
-	                peliculasEnMemoria.add(p);
-	            }
+	        case "war" 			   : return Genero.GUERRA;
 
-	            // Ordenar por rating_promedio descendente
-	            peliculasEnMemoria.sort(Comparator.comparing(Pelicula::getRatingPromedio).reversed());
+	        case "horror"		   : return Genero.HORROR;
 
-	        } catch (IOException e) {
-	            // Re-lanzar como excepción propia para que el controlador/Thread lo capture y la GUI lo maneje.
-	            throw new CsvImportException("Error de E/S leyendo CSV: " + rutaCsv, e);
-	        }
+	        case "mystery"		   : return Genero.MISTERIO;
+
+	        case "music"		   : return Genero.MUSICA;
+
+	        case "crime"		   : return Genero.POLICIAL;
+
+	        case "thriller" 	   : return Genero.THRILLER;
+
+	        default 	   		   : return Genero.DESCONOCIDO;
+	    
 	    }
 
-	    // Método utilitario para quitar comillas envolventes si existen.
-	    private static String quitarComillas(String s) {
-	        if (s == null) return "";
-	        s = s.trim();
-	        if (s.startsWith("\"") && s.endsWith("\"") && s.length() >= 2) {
-	            return s.substring(1, s.length() - 1);
-	        }
-	        return s;
-	    }
-
-	    // Devuelve top N (usamos 10 en la GUI). Protegemos con subList safe.
-	    public static List<Pelicula> obtenerTopN(int n) {
-	        int size = Math.min(n, peliculasEnMemoria.size());
-	        return new ArrayList<>(peliculasEnMemoria.subList(0, size));
-	    }
-
-	    public static List<Pelicula> obtenerTop10() {
-	        return obtenerTopN(10);
-	    }
+	}
 	
+	public static void ordenarPorRatingDesc() {
+	    peliculasEnMemoria.sort(
+	        (p1, p2) -> Float.compare(p2.getEstrellasPromedio(), p1.getEstrellasPromedio())
+	    );
+	}
+
+	public static List<Pelicula> obtenerTop10() {
+
+	    if (peliculasEnMemoria.size() <= 10)
+	        return new ArrayList<>(peliculasEnMemoria);
+
+	    return new ArrayList<>(peliculasEnMemoria.subList(0, 10));
+	}
+
 }
+
