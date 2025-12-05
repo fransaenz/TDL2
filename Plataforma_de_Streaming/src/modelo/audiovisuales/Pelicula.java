@@ -17,6 +17,7 @@ import java.time.Duration;
 
 public class Pelicula extends Audiovisual{
 	
+	
 	private int id;
 	
 	 /** Pelicula que sirve como precuela de este */
@@ -95,12 +96,20 @@ public class Pelicula extends Audiovisual{
 		
 	}
 	
-	public Pelicula(String titulo, String director, String elenco, Genero genero,
-			Duration duracion, String resumen, int anio, String poster) {
-		super(titulo, director, elenco, genero, duracion, resumen);
+	
+	//el usado por el lector de csv
+	public Pelicula(int anio, String titulo, String resumen,
+			float estrellasPromedio, Genero genero, String poster) {
+		
+		super(titulo, resumen, genero);
+		this.estrellasPromedio = estrellasPromedio;
 		this.anio = anio;
-		this.poster= poster;
+		this.poster = poster;
 	}
+
+	
+	
+	
 	
 	public int getId() {
 		return id;
@@ -211,6 +220,6 @@ public class Pelicula extends Audiovisual{
     
 	 @Override
 	public String toString() {
-		return super.toString();
+		return "Año de estreno: " + anio + super.toString() + ", estrellas promedio: " + estrellasPromedio + ", URL del poster: " + poster;
 	}
 }

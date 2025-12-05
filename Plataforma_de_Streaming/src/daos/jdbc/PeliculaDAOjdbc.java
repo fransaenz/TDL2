@@ -21,17 +21,23 @@ public class PeliculaDAOjdbc implements PeliculaDAO{
 	
 	public void insertar(Pelicula pelicula) {
 		
-		String SQL = "INSERT INTO PELICULA (TITULO, DIRECTOR, GENERO, DURACION, ELENCO, RESUMEN) VALUES (?, ?, ?, ?, ?, ?)";
-		try {
-			PreparedStatement p_stmt = conexion.prepareStatement(SQL);
+		String SQL = "INSERT INTO PELICULA (TITULO, GENERO, RESUMEN, ESTRELLAS_PROMEDIO, ANIO, POSTER) VALUES (?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL)){
 			p_stmt.setString(1, pelicula.getTitulo());
-			p_stmt.setString(2, pelicula.getDirector());
-			p_stmt.setString(3, pelicula.getGenero().name()); 
-			p_stmt.setInt(4, (int) pelicula.getDuracion().toMinutes());
-			p_stmt.setString(5, pelicula.getElenco());
-			p_stmt.setString(6, pelicula.getResumen());
+			p_stmt.setString(2, pelicula.getGenero().name());
+			p_stmt.setString(3, pelicula.getResumen());
+			p_stmt.setFloat(4, pelicula.getEstrellasPromedio());
+			p_stmt.setInt(5, pelicula.getAnio());
+			p_stmt.setString(6, pelicula.getPoster());
+			
 			p_stmt.executeUpdate();
-			p_stmt.close();
+			
+			try(ResultSet keys = p_stmt.getGeneratedKeys()){
+				if (keys.next()) {
+					int id = keys.getInt(1);
+	            	pelicula.setId(id);
+	        	}
+			}
 		} catch (SQLException e) {
             System.err.println("❌ Error al insertar pelicula: " + e.getMessage());
 		} 
@@ -47,14 +53,16 @@ public class PeliculaDAOjdbc implements PeliculaDAO{
 				Pelicula pelicula;
 				
 				while(resul.next()) {
+					
 					pelicula = new Pelicula(
+							resul.getInt("ANIO"),
 							resul.getString("TITULO"),
-	        				resul.getString("DIRECTOR"),
-	        				resul.getString("ELENCO"),
-	        				Genero.valueOf(resul.getString("GENERO").toUpperCase()),
-	        				Duration.ofMinutes(resul.getInt("DURACION")),
-	        				resul.getString("RESUMEN")
+							resul.getString("RESUMEN"),
+							resul.getFloat("ESTRELLAS_PROMEDIO"),
+							Genero.valueOf(resul.getString("GENERO").toUpperCase()),
+	        				resul.getString("POSTER")
 	            			);
+					
 					pelicula.setId(resul.getInt("ID"));
 					listaPeliculas.addLast(pelicula);
 				}
@@ -77,12 +85,12 @@ public class PeliculaDAOjdbc implements PeliculaDAO{
 	        	
 	        	if (resul.next()) {
 	        		peli = new Pelicula(
-	        				resul.getString("TITULO"),
-	        				resul.getString("DIRECTOR"),
-	        				resul.getString("ELENCO"),
-	        				Genero.valueOf(resul.getString("GENERO").toUpperCase()),
-	        				Duration.ofMinutes(resul.getInt("DURACION")),
-	        				resul.getString("RESUMEN")
+							resul.getInt("ANIO"),
+							resul.getString("TITULO"),
+							resul.getString("RESUMEN"),
+							resul.getFloat("ESTRELLAS_PROMEDIO"),
+							Genero.valueOf(resul.getString("GENERO").toUpperCase()),
+	        				resul.getString("POSTER")
 	            			);
 	        		peli.setId(resul.getInt("ID"));
 	        		return peli;

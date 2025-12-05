@@ -50,10 +50,7 @@ public class ConexionBD {
       	String sql = "CREATE TABLE IF NOT EXISTS PELICULA (" +
               "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
               "TITULO TEXT(100) NOT NULL, " +
-              "DIRECTOR TEXT(100) NOT NULL, " +
               "GENERO TEXT(100) NOT NULL, " +
-              "DURACION INTEGER NOT NULL, " +
-              "ELENCO TEXT(500) NOT NULL, " +
               "RESUMEN TEXT(500) NOT NULL," +
               "ESTRELLAS_PROMEDIO REAL NOT NULL," +
               "ANIO INTEGER NOT NULL," +

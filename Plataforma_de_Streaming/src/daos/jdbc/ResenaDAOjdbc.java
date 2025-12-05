@@ -90,7 +90,7 @@ public class ResenaDAOjdbc implements ResenaDAO{
 			return filas >0;
 		
 		} catch (SQLException e) {
-			System.err.println("❌ Error al verificar si existe el dni: " + e.getMessage());
+			System.err.println("❌ Error al aprobar reseña: " + e.getMessage());
 			return false;
 		}
 	}
