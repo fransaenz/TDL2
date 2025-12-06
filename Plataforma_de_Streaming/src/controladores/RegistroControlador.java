@@ -3,10 +3,14 @@ package controladores;
 import gui.VistaRegistro;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import daos.interfaces.PersonaDAO;
 import daos.interfaces.UsuarioDAO;
 import daos.jdbc.*;
+import excepciones.DNIDuplicadoException;
+import excepciones.EmailInvalidoException;
+import excepciones.UsuarioYaExisteException;
 import modelo.perfiles.*;
 
 public class RegistroControlador {
@@ -15,70 +19,65 @@ public class RegistroControlador {
 	
     // 1) Referencias a la vista y al modelo (DAO)
     private VistaRegistro vista;
-    private UsuarioDAO u; //Este dato y los metodos en los que lo uso tienen que ir a modelo
-
+    private UsuarioDAO udao; //Este dato y los metodos en los que lo uso tienen que ir a modelo
+    private PersonaDAO pdao;
+    
+    
     // 2) Constructor: recibe la vista que controla
     public RegistroControlador(VistaRegistro vista) {
         this.vista = vista;
-        this.u = new UsuarioDAOjdbc();   // acceso a BD
-
+        this.udao = new UsuarioDAOjdbc();   // acceso a BD
+        this.pdao = new PersonaDAOjdbc();
         // 3) Le indicamos a la vista quién es su controlador
         this.vista.setControlador(this);
     }
 
-    // 4) Método llamado cuando el usuario aprieta "Registrarse"
-    public void registrarUsuario() {
+    
+    
+// 4) Método llamado cuando el usuario aprieta "Registrarse"
+public boolean registrarUsuario(String email, String nombreUsuario, String contrasena,
+            					String nombre, String apellido, int dni, int nroTarjeta) throws EmailInvalidoException, UsuarioYaExisteException, DNIDuplicadoException {
 
-        // 5) Tomamos los datos que el usuario escribió en los JTextField
-        String nombreUsuario = vista.getNombreUsuario();
-        String email = vista.getEmail();
-        String password = vista.getPassword();
-
-        // 6) Validaciones (muy básicas)
-        if (nombreUsuario.isBlank() || email.isBlank() || password.isBlank()) {
-            vista.mostrarMensaje("Todos los campos deben estar completos.");
-            return;
-        }
-
-        boolean exito = false;
-        List<Usuario> usuarios  = u.listarUsuarios();
-        for(int i = 0; i<usuarios.size(); i++) {
-        	if (usuarios.get(i).getEmail() == email) {
-        		exito = true;
-        		break;
-        	}
-        }
-        
-        if (exito) { 
-            vista.mostrarMensaje("El e-mail ya está registrado.");
-            return;
-        }
-
-        // 7) Creamos el usuario (el modelo)
-        Usuario nuevo = new Usuario(nombreUsuario, email, password);
-
-        // 8) Lo guardamos en la BD mediante el DAO
-        u.insertar(nuevo);
-
-        // 9) Mostramos un mensaje de éxito en la vista
-        vista.mostrarMensaje("Usuario registrado correctamente.");
-
-        // 10) Cerramos la ventana de registro y volvemos a la VistaLogin
-        vista.cerrar();
+    	
+	if (email == null || nombreUsuario == null || contrasena == null) {
+        throw new IllegalArgumentException("Argumentos nulos.");
     }
+    if (!esEmailBasico(email)) {
+        throw new EmailInvalidoException("Email con formato inválido.");
+    }
+
+   
+    List<Usuario> usuarios = udao.listarUsuarios();
+
+    for (Usuario u : usuarios) {
+        if (email.equals(u.getEmail())) {
+            throw new UsuarioYaExisteException("El email ya está registrado.");
+        }
+        if (nombreUsuario.equals(u.getNombreUsuario())) {
+            throw new UsuarioYaExisteException("El nombre de usuario ya existe.");
+        }
+    }
+
+    if (pdao.existeDNI(dni)) {
+        throw new DNIDuplicadoException("El DNI ya está registrado.");
+    }
+
     
-    // Tengo que sumar el metodo registrarUsuario(email, usuario, pass); Copiar el mismo que del main anterior
+    Usuario usu = new Usuario(email, contrasena, nombreUsuario);
     
-    	public boolean registrarUsuario (String email, String nombreUsuario, String contrasena, String nombre, String apellido, int dni, int nroTarjeta) {
-    	Usuario usu = new Usuario(email, contrasena, nombreUsuario);
-    	PersonaDAO p = new PersonaDAOjdbc();
-		u.insertar(usu);
-		Persona per = new Persona (nombre,apellido, dni,nroTarjeta, usu);
-		p.insertar(per);
-		
-		return p.actualizarUsuario(usu, per);
-    	}
+    int idUsuario = udao.insertar(usu);
     
+    Persona per = new Persona(nombre, apellido, dni, nroTarjeta, usu);
+    
+    int idPersona = pdao.insertar(per);
+
+    boolean ok = pdao.actualizarUsuario(usu, per);
+    if (!ok) {
+        throw new RuntimeException("Error al actualizar relación usuario-persona");
+    }
+    return true;
+
+}
     public boolean validarEmail (String email) {
     	boolean var = false;
 		if (esEmailBasico(email)) {

@@ -1,7 +1,10 @@
 package gui;
 
 import controladores.MainControlador;
+import controladores.RegistroControlador;
+import controladores.ServicioLogin;
 import excepciones.*;
+import modelo.perfiles.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,14 +56,18 @@ public class VistaLogin extends JFrame {
         panelBotones.add(btnLogin);
         panelBotones.add(btnRegistro);
 
-        add(panelBotones, BorderLayout.SOUTH);
-        add(lblMensaje, BorderLayout.SOUTH);
+        JPanel panelInferior = new JPanel(new BorderLayout());
+        panelInferior.add(panelBotones, BorderLayout.CENTER);
+        panelInferior.add(lblMensaje, BorderLayout.SOUTH);
+
+        add(panelInferior, BorderLayout.SOUTH);
 
         // ACCIONES DE BOTONES
         btnLogin.addActionListener(e -> intentarLogin());
 
         btnRegistro.addActionListener(e -> {
-            new VistaRegistro();
+        	VistaRegistro vistaReg = new VistaRegistro();
+        	new RegistroControlador(vistaReg);
             dispose();
         });
 
@@ -81,13 +88,12 @@ public class VistaLogin extends JFrame {
             }
 
             // 2) VALIDAMOS FORMATO DEL EMAIL
-            if (!email.contains("@") || !email.contains(".")) {
+            if (!email.contains("@")) {
                 throw new EmailInvalidoException("Formato de email incorrecto.");
             }
-
-            // 3) LLAMAMOS AL CONTROLADOR
-            var usuario = MainControlador.getInstance().login(email, pass);
-
+            //3) CREO USUARIO CON SERVICIO LOGIN
+            Usuario usuario = ServicioLogin.login(email, pass);
+            
             // 4) SI VOLVIÓ NULO → USUARIO NO EXISTE
             if (usuario == null) {
                 throw new UsuarioNoEncontradoException("Usuario o contraseña incorrectos.");
@@ -95,7 +101,7 @@ public class VistaLogin extends JFrame {
 
             // 5) LOGIN EXITOSO
             lblMensaje.setText("Acceso concedido.");
-            new VistaPrincipal();
+            new VistaPrincipal(usuario);
             dispose();
 
         } catch (CamposVaciosException | EmailInvalidoException | UsuarioNoEncontradoException ex) {

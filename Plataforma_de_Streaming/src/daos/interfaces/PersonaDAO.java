@@ -7,7 +7,7 @@ import modelo.perfiles.Usuario;
 
 public interface PersonaDAO {
 
-	void insertar(Persona persona); //use
+	int insertar(Persona persona); //use
 
     List<Persona> listarPersonasSinUsuario(); //use
 

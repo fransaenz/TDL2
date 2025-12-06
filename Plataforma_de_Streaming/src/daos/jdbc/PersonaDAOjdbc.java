@@ -21,28 +21,37 @@ public class PersonaDAOjdbc implements PersonaDAO{
 	}
 	
 
-	public void insertar(Persona persona) {
+	public int insertar(Persona persona) {
 		
 		String SQL = "INSERT INTO DATOS_PERSONALES (NOMBRE, APELLIDO, DNI, NRO_TARJETA, ID_USUARIO) VALUES (?, ?, ?, ?, ?)";
 		
 		try {
-			PreparedStatement p_stmt = conexion.prepareStatement(SQL);
+			PreparedStatement p_stmt = conexion.prepareStatement(SQL,Statement.RETURN_GENERATED_KEYS);
 			p_stmt.setString(1, persona.getNombre());
 	        p_stmt.setString(2, persona.getApellido());
 	        p_stmt.setInt(3, persona.getDni());
 	        p_stmt.setInt(4, persona.getNroTarjeta());
-	        // si la persona aún no tiene usuario asociado → insertar NULL
+	        
 	        if (persona.getPerfil() == null) {
 	            p_stmt.setNull(5, java.sql.Types.INTEGER);
 	        } else {
 	            p_stmt.setInt(5, persona.getPerfil().getId());
 	        }
+	        
 			p_stmt.executeUpdate();
+			
+			 try (ResultSet keys = p_stmt.getGeneratedKeys()) {
+		            if (keys.next()) {
+		                int id = keys.getInt(1);
+		                persona.setId(id);
+		                return id;
+		            }
+		        }
 			p_stmt.close();
 		} catch (SQLException e) {
             System.err.println("❌ Error al insertar datos personales: " + e.getMessage());
 		}
-		
+		return -1;
 	}
 //lista personas sin usuario asignado
 	public List<Persona> listarPersonasSinUsuario(){

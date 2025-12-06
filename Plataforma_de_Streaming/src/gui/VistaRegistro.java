@@ -20,7 +20,6 @@ public class VistaRegistro extends JFrame {
     private JTextField txtApellido;
     private JTextField txtDni;
     private JTextField txtNroTarjeta;
-    PersonaDAO p = new PersonaDAOjdbc();
 
     public VistaRegistro() {
 
@@ -107,32 +106,21 @@ public class VistaRegistro extends JFrame {
             // CONVERTIR A INT
             int dni = Integer.parseInt(dniStr);
             int nroTarjeta = Integer.parseInt(nroTarjetaStr);
-
-            // VALIDAR FORMATO EMAIL
-            if (controlador.validarEmail(email)) {
-                throw new EmailInvalidoException("El email ingresado no es válido.");
-            }
-
+            
             // PEDIMOS AL CONTROLADOR QUE REGISTRE
             boolean exito = controlador.registrarUsuario(email, usuario, pass,
                     nombre, apellido, dni, nroTarjeta);
-            if (p.existeDNI(dni)) {
-                throw new DNIDuplicadoException("El DNI ya está registrado.");
+            
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Registro completado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                new VistaLogin();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo registrar el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            if (!exito) {
-                throw new UsuarioYaExisteException("El usuario o email ya está registrado.");
-            }
+            
 
-            // REGISTRO EXITOSO
-            JOptionPane.showMessageDialog(this,
-                    "Registro completado correctamente.",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            new VistaLogin();
-            dispose();
-
-        } catch (CamposVaciosException | EmailInvalidoException | UsuarioYaExisteException e) {
+        } catch (CamposVaciosException | EmailInvalidoException | UsuarioYaExisteException | DNIDuplicadoException e) {
             JOptionPane.showMessageDialog(this,
                     e.getMessage(),
                     "Error en Registro",

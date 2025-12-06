@@ -1,5 +1,6 @@
 package modelo.audiovisuales;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import modelo.audiovisuales.util.*;
@@ -27,10 +28,10 @@ public class Pelicula extends Audiovisual{
     /** Tráiler asociado a la pelicula */
 	Trailer trailer;
 	/** Lista de todas las precuelas de la Pelicula */
-    private List<Pelicula> ListaPrecuelas;
+    private List<Pelicula> ListaPrecuelas = new ArrayList<>();
     
     /** Lista de todas las secuelas de la Pelicula */
-    private List<Pelicula> ListaSecuelas;
+    private List<Pelicula> ListaSecuelas= new ArrayList<>();
     
     private float estrellasPromedio;
     

@@ -36,7 +36,7 @@ public class LoginControlador {
         UsuarioDAO u = new UsuarioDAOjdbc();
         List<Usuario> usuarios  = u.listarUsuarios();
         for(int i = 0; i<usuarios.size(); i++) {
-        	if (usuarios.get(i).getEmail() == email) {
+        	if (usuarios.get(i).getEmail().equals(email)) {
         		encontrado = usuarios.get(i);
         		break;
         	}
@@ -59,7 +59,8 @@ public class LoginControlador {
 
     private void abrirRegistro() {
         VistaRegistro registro = new VistaRegistro();
-        registro.mostrar();
+        new RegistroControlador(registro);
+        registro.setVisible(true);
         vista.cerrar();
     }
     

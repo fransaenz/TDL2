@@ -22,7 +22,7 @@ public class PeliculaDAOjdbc implements PeliculaDAO{
 	public void insertar(Pelicula pelicula) {
 		
 		String SQL = "INSERT INTO PELICULA (TITULO, GENERO, RESUMEN, ESTRELLAS_PROMEDIO, ANIO, POSTER) VALUES (?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL)){
+		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)){
 			p_stmt.setString(1, pelicula.getTitulo());
 			p_stmt.setString(2, pelicula.getGenero().name());
 			p_stmt.setString(3, pelicula.getResumen());

@@ -22,7 +22,7 @@ public class ImportadorPeliculas {
 
 	public static final List<Pelicula> peliculasEnMemoria = new ArrayList<>();
 
-	public static void importarCSV(String rutaCsv) throws CsvImportException, FileNotFoundException, IOException {
+	public static void importarCSV(String rutaCsv) throws FileNotFoundException, IOException {
 		
 		peliculasEnMemoria.clear();
 		
