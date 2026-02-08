@@ -1,73 +1,135 @@
 package controladores;
 
+import gui.VistaLogin;
 import gui.VistaRegistro;
 
-import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+//import javax.swing.JOptionPane;
 
 import daos.interfaces.PersonaDAO;
 import daos.interfaces.UsuarioDAO;
 import daos.jdbc.*;
+import excepciones.CamposVaciosException;
+import excepciones.DNIDuplicadoException;
+import excepciones.DatosInvalidosException;
+import excepciones.EmailInvalidoException;
 import modelo.perfiles.*;
 
 public class RegistroControlador {
 
-	
-	
-    // 1) Referencias a la vista y al modelo (DAO)
-    private VistaRegistro vista;
-    private UsuarioDAO u; //Este dato y los metodos en los que lo uso tienen que ir a modelo
 
-    // 2) Constructor: recibe la vista que controla
+    private VistaRegistro vista;
+    private UsuarioDAO u;
+    private PersonaDAO p;	 
+
     public RegistroControlador(VistaRegistro vista) {
         this.vista = vista;
-        this.u = new UsuarioDAOjdbc();   // acceso a BD
-
-        // 3) Le indicamos a la vista quién es su controlador
-        this.vista.setControlador(this);
-    }
-
-    // 4) Método llamado cuando el usuario aprieta "Registrarse"
-    public void registrarUsuario() {
-
-        // 5) Tomamos los datos que el usuario escribió en los JTextField
-        String nombreUsuario = vista.getNombreUsuario();
-        String email = vista.getEmail();
-        String password = vista.getPassword();
-
-        // 6) Validaciones (muy básicas)
-        if (nombreUsuario.isBlank() || email.isBlank() || password.isBlank()) {
-            vista.mostrarMensaje("Todos los campos deben estar completos.");
-            return;
-        }
-
-        boolean exito = false;
-        List<Usuario> usuarios  = u.listarUsuarios();
-        for(int i = 0; i<usuarios.size(); i++) {
-        	if (usuarios.get(i).getEmail() == email) {
-        		exito = true;
-        		break;
-        	}
-        }
-        
-        if (exito) { 
-            vista.mostrarMensaje("El e-mail ya está registrado.");
-            return;
-        }
-
-        // 7) Creamos el usuario (el modelo)
-        Usuario nuevo = new Usuario(nombreUsuario, email, password);
-
-        // 8) Lo guardamos en la BD mediante el DAO
-        u.insertar(nuevo);
-
-        // 9) Mostramos un mensaje de éxito en la vista
-        vista.mostrarMensaje("Usuario registrado correctamente.");
-
-        // 10) Cerramos la ventana de registro y volvemos a la VistaLogin
-        vista.cerrar();
+        this.u = new UsuarioDAOjdbc(); 
+        this.p = new PersonaDAOjdbc();
+        inicializarEventos();
     }
     
-    // Tengo que sumar el metodo registrarUsuario(email, usuario, pass); Copiar el mismo que del main anterior
+    
+    private void inicializarEventos() {
+        // Evento para el botón Registrar (Clase Anónima)
+        this.vista.addRegistroListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                intentarRegistro();
+            }
+        });
+
+        // Evento para el botón Volver (Clase Anónima)
+        this.vista.addVolverListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                volverALogin();
+            }
+        });
+    }
+    
+    
+    private void intentarRegistro() {
+        try {
+
+            String email = vista.getCampoEmail();
+            String pass = vista.getCampoPassword();
+            String nombre = vista.getCampoNombre();
+            String apellido = vista.getCampoApellido();
+            String dniStr = vista.getCampoDni();
+            String nroTarjetaStr = vista.getCampoNroTarjeta();
+            String usuario = vista.getCampoUsuario();
+            
+
+            // VALIDACIÓN DE VACÍOS
+            if (email.isEmpty() || usuario.isEmpty() || pass.isEmpty() ||
+                nombre.isEmpty() || apellido.isEmpty() ||
+                dniStr.isEmpty() || nroTarjetaStr.isEmpty()) {
+
+                throw new CamposVaciosException();
+            }
+
+            if (!soloLetras(nombre)) {
+                throw new DatosInvalidosException("El nombre no puede contener números.");
+            }
+
+            if (!soloLetras(apellido)) {
+                throw new DatosInvalidosException("El apellido no puede contener números.");
+            }
+            
+            if (!esNumerico(dniStr) || dniStr.length() < 7 || dniStr.length() > 8) {
+                throw new DatosInvalidosException("El DNI debe ser un número de entre 7 y 8 dígitos.");
+            }
+
+            if (!esNumerico(nroTarjetaStr)) {
+                throw new DatosInvalidosException("El número de tarjeta debe contener solo números.");
+            }
+            
+            
+            // CONVERTIR A INT
+            int dni = Integer.parseInt(dniStr);
+            int nroTarjeta = Integer.parseInt(nroTarjetaStr);
+            
+            if (p.existeDNI(dni)) {
+                throw new DNIDuplicadoException();
+            }
+            
+            // VALIDAR FORMATO EMAIL
+            if (!esEmailBasico(email)) { 
+                throw new EmailInvalidoException();
+            }
+
+            // PEDIMOS AL CONTROLADOR QUE REGISTRE
+            boolean exito = registrarUsuario(email, usuario, pass,
+                    nombre, apellido, dni, nroTarjeta);
+            
+            if (exito) { //Resolvi el error sacanco el !, no se si esta bien esta idea. 
+                throw new Exception("Error al registrar el nuevo usuario.");
+            }
+
+            vista.mostrarMensaje("Registro completado correctamente.");
+
+            VistaLogin vistaLogin = new VistaLogin();
+            new LoginControlador(vistaLogin);
+            vistaLogin.setVisible(true);
+            vista.salir();
+
+        } catch (CamposVaciosException eUno) {
+        	vista.mostrarError(eUno.getMessage());
+    	} catch (EmailInvalidoException eDos) {
+    	    vista.mostrarError(eDos.getMessage());
+    	} catch (DatosInvalidosException eTres) {
+    	    vista.mostrarError(eTres.getMessage());
+    	} catch (DNIDuplicadoException eCuatro) {
+    	    vista.mostrarError(eCuatro.getMessage());
+        } catch (Exception ex) {
+        	vista.mostrarError(ex.getMessage());
+        }
+    }
+
+    
     
     	public boolean registrarUsuario (String email, String nombreUsuario, String contrasena, String nombre, String apellido, int dni, int nroTarjeta) {
     	Usuario usu = new Usuario(email, contrasena, nombreUsuario);
@@ -78,14 +140,6 @@ public class RegistroControlador {
 		
 		return p.actualizarUsuario(usu, per);
     	}
-    
-    public boolean validarEmail (String email) {
-    	boolean var = false;
-		if (esEmailBasico(email)) {
-			var = true;	            
-		}
-		return var;
-    }
     
     public static boolean esEmailBasico(String email) {
         int arroba = email.indexOf('@');
@@ -99,5 +153,37 @@ public class RegistroControlador {
         String despues = email.substring(arroba + 1);
 
         return !antes.isEmpty() && !despues.isEmpty();
+    }
+    
+    private void volverALogin() {
+
+        VistaLogin vistaLogin = new VistaLogin();
+        new LoginControlador(vistaLogin);
+        vistaLogin.setVisible(true);
+        vista.salir();
+    }
+    
+    
+    public static boolean esNumerico(String texto) {
+
+        if (texto == null || texto.isEmpty()) {
+            return false;
+        }
+
+        for (int i = 0; i < texto.length(); i++) {
+            if (!Character.isDigit(texto.charAt(i))) {
+                return false; // encontró algo que no es número
+            }
+        }
+        return true; // todos son dígitos
+    }
+    
+    public static boolean soloLetras(String texto) {
+        for (int i = 0; i < texto.length(); i++) {
+            if (Character.isDigit(texto.charAt(i))) {
+                return false; // encontró un número
+            }
+        }
+        return true; // no encontró ningún número
     }
 }
