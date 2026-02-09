@@ -9,6 +9,7 @@ import modelo.perfiles.Usuario;
 import modelo.audiovisuales.util.Genero;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import servicios.ServicioBusqueda;
@@ -70,13 +71,15 @@ public class BienvenidaControlador {
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Aquí podrías obtener la película asociada al botón
-                    abrirResena();
+                    // Recuperamos la película que le pegamos al botón en la vista
+                    Pelicula peliSeleccionada = (Pelicula) btn.getClientProperty("peliculaAsociada");
+                    
+                    // Se la pasamos al método
+                    abrirResena(peliSeleccionada);
                 }
             });
         }
     }
-
     private void iniciarCargaDatos() {
         // Hilo para no congelar la GUI durante la carga
         new Thread(new Runnable() {
@@ -95,7 +98,11 @@ public class BienvenidaControlador {
         }).start();
         
         this.servicioBusqueda = new ServicioBusqueda(p.listarPeliculas());
-        this.vista.setTop10(p.getTop10());
+        try {
+            this.vista.setTop10(p.getTop10());
+        } catch (SQLException e) {
+            vista.mostrarError("Error al cargar las películas");
+        }
     }
 
     // --- MÉTODOS DE NAVEGACIÓN ---
@@ -129,9 +136,9 @@ public class BienvenidaControlador {
     	}
     
 
-    private void abrirResena() {
+    private void abrirResena(Pelicula peli) {
         VistaResena vistaRes = new VistaResena();
-        new ResenaControlador(vistaRes);
+        new ResenaControlador(vistaRes, peli, usu);
         vistaRes.setVisible(true);
         // No cierro la principal porque quiero que la reseña sea una ventana aparte
     }

@@ -159,6 +159,7 @@ public class VistaBienvenida extends JFrame {
         pnl.setBackground(colorDelFondo);
         
         JButton btnReseniar = new JButton("Reseñar");
+        btnReseniar.putClientProperty("peliculaAsociada", peli);
         botonesReseniar.add(btnReseniar);
         pnl.add(btnReseniar);
 
