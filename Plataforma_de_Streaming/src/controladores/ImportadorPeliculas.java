@@ -20,20 +20,18 @@ import java.time.LocalDate;
 
 public class ImportadorPeliculas implements Runnable{
 
-	private final String rutaCSV = "recursos/movies_database.csv";
 	
 	public static final List<Pelicula> peliculasEnMemoria = new ArrayList<>();
 
 	public void run() {
-		try {
-			importarCSV();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
+		 try {
+				importarCSV("src/recursos/movies_database.csv");
+			} catch (IOException e) { 
+				System.out.println("Error de lectura del CSV");
+			}
 	}
 	
-	public static void importarCSV() throws FileNotFoundException, IOException {
+	public static void importarCSV(String rutaCsv) throws FileNotFoundException, IOException {
 		
 		peliculasEnMemoria.clear();
 		
