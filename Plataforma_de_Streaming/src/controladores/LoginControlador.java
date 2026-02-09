@@ -72,7 +72,7 @@ public class LoginControlador {
 
     		vista.mostrarMensaje("Inicio de sesión exitoso.");
     		VistaBienvenida vistaBienvenida = new VistaBienvenida();
-    		new BienvenidaControlador(vistaBienvenida, u);
+    		new BienvenidaControlador(vistaBienvenida, encontrado);
     		vistaBienvenida.setVisible(true);
     		vista.salir();
     		

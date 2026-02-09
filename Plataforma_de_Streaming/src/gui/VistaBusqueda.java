@@ -13,14 +13,19 @@ public class VistaBusqueda extends JFrame {
     private JButton btnContinuar = new JButton("Continuar");
     private String titulo;
 
-    // Estilo (Consistente con tus otras vistas)
+    // Colores
     private Color colorDelFondo = new Color(235, 245, 255);
     private Color colorDelBoton = new Color(0, 33, 71);
     private Color colorEtiquetaBoton = new Color(255, 200, 0);
 
+    // Tipografía
+    private Font fuenteTituloSeccion = new Font("Calibri", Font.BOLD, 16);
+    private Font fuenteCuerpoTexto = new Font("Calibri", Font.PLAIN, 14);
+
+
     public VistaBusqueda() {
         
-    	setTitle("FLUXER - " + titulo);
+    	//setTitle("FLUXER - " + titulo);
         setSize(475, 300); 
         setLocationRelativeTo(null);
         setResizable(false);
@@ -28,7 +33,7 @@ public class VistaBusqueda extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel contentPane = new JPanel(new BorderLayout(10, 10));
-        contentPane.setBackground(colorFondo);
+        contentPane.setBackground(colorDelFondo);
         contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
         setContentPane(contentPane);
 
@@ -36,8 +41,8 @@ public class VistaBusqueda extends JFrame {
         JPanel pnlNorte = new JPanel(new GridLayout(2, 1));
         pnlNorte.setOpaque(false);
 
-        lblTitulo.setFont(new Font("Calibri", Font.BOLD, 20));
-        lblAnio.setFont(new Font("Calibri", Font.ITALIC, 14));
+        lblTitulo.setFont(fuenteTituloSeccion);
+        lblAnio.setFont(fuenteCuerpoTexto);
 
         pnlNorte.add(lblTitulo);
         pnlNorte.add(lblAnio);
@@ -48,7 +53,7 @@ public class VistaBusqueda extends JFrame {
         txtResumen.setWrapStyleWord(true);
         txtResumen.setEditable(false);
         txtResumen.setBackground(colorDelFondo);
-        txtResumen.setFont(new Font("Calibri", Font.PLAIN, 14));
+        txtResumen.setFont(fuenteCuerpoTexto);
         
         // Un scroll por si el resumen es muy largo
         JScrollPane scroll = new JScrollPane(txtResumen);
@@ -71,9 +76,10 @@ public class VistaBusqueda extends JFrame {
 
     // Métodos para que el controlador cargue los datos
     public void cargarDatos(String titulo, int anio, String resumen) {
-        lblTitulo.setText(titulo.toUpperCase());
-        lblAnio.setText("Año: " + anio);
-        txtResumen.setText(resumen);
+        this.setTitle("FLUXER - " + titulo.toUpperCase()); // Actualiza el título de la ventana
+        this.lblTitulo.setText(titulo.toUpperCase());
+        this.lblAnio.setText("Año: " + anio);
+        this.txtResumen.setText(resumen);
     }
 
     public void addContinuarListener(ActionListener l) {
