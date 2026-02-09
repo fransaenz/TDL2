@@ -1,14 +1,14 @@
 package excepciones;
 
-public class CamposVaciosException extends Exception{
+public class CamposVaciosException extends Exception {
+
+	private static final String mensaje = "Todos los campos son obligatorios.";
 	
-	public CamposVaciosException () {
-		super();
-	}
+	public CamposVaciosException() {
+        super(mensaje);
+    }
 	
-	public CamposVaciosException (String message) {
-		super(message);
-	}
-	
-	
+    public CamposVaciosException(String mensaje) {
+        super(mensaje);
+    }
 }

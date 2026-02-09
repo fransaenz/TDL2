@@ -8,6 +8,7 @@ import daos.interfaces.PeliculaDAO;
 import modelo.audiovisuales.Pelicula;
 import modelo.audiovisuales.util.Genero;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.time.Duration;
 
@@ -102,4 +103,39 @@ public class PeliculaDAOjdbc implements PeliculaDAO{
 	    return null;
 	}
 	
+	public ArrayList<Pelicula> getTop10() throws SQLException {
+
+	    ArrayList<Pelicula> top10 = new ArrayList<>();
+
+	    String sql = """
+	        SELECT *
+	        FROM pelicula
+	        ORDER BY rating_promedio DESC
+	        LIMIT 10
+	    """;
+
+	    try (Connection conn = ConexionBD.getConexion();
+	         PreparedStatement stmt = conn.prepareStatement(sql);
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        while (rs.next()) {
+
+	            Pelicula pelicula = new Pelicula(
+	                rs.getString("titulo"),
+	                rs.getInt("duracion"),
+	                rs.getDouble("rating_promedio")
+	                // agregá acá el resto si tu constructor lo pide
+	            );
+
+	            // si algunos campos no van por constructor:
+	            // pelicula.setGenero(...)
+	            // pelicula.setIdioma(...)
+	            // pelicula.setPais(...)
+
+	            top10.add(pelicula);
+	        }
+	    }
+
+	    return top10;
+	}
 }
