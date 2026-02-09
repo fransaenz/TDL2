@@ -18,18 +18,29 @@ import excepciones.CsvImportException;
 import java.time.LocalDate;
 
 
-public class ImportadorPeliculas {
+public class ImportadorPeliculas implements Runnable{
 
+	private final String rutaCSV = "recursos/movies_database.csv";
+	
 	public static final List<Pelicula> peliculasEnMemoria = new ArrayList<>();
 
-	public static void importarCSV(String rutaCsv) throws FileNotFoundException, IOException {
+	public void run() {
+		try {
+			importarCSV();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	public static void importarCSV() throws FileNotFoundException, IOException {
 		
 		peliculasEnMemoria.clear();
 		
 		List<String> errores = new ArrayList<>();
 	        
 		
-	    try (BufferedReader br = new BufferedReader(new FileReader(rutaCsv))){
+		try (BufferedReader br = new BufferedReader(new FileReader(rutaCsv))){
 	       
 	    	String linea = br.readLine(); //leo y descarto la primera linea, es decir el encabezado, que no tiene datos
 	        

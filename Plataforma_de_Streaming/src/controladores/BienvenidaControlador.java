@@ -81,6 +81,39 @@ public class BienvenidaControlador {
         }
     }
     private void iniciarCargaDatos() {
+
+        // Mostrar pantalla de carga
+        vista.cambiarAVistaCarga();
+
+        ImportadorPeliculas importador = new ImportadorPeliculas();
+
+        Thread hiloCarga = new Thread(() -> {
+            try {
+                // 1. Importar CSV → BD
+                importador.run();   // o importador.importar()
+
+                // 2. Obtener top 10
+                List<Pelicula> top10 = p.getTop10();
+
+                // 3. Volver a la EDT
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    vista.setTop10(top10);
+                    vista.cambiarAVistaContenido();
+                });
+
+            } catch (Exception e) {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    vista.mostrarError("Error al cargar las películas");
+                });
+            }
+        });
+
+        hiloCarga.start();
+    }
+
+    
+    
+   /* private void iniciarCargaDatos() {
         // Hilo para no congelar la GUI durante la carga
         new Thread(new Runnable() {
             @Override
@@ -104,7 +137,7 @@ public class BienvenidaControlador {
             vista.mostrarError("Error al cargar las películas");
         }
     }
-
+*/
     // --- MÉTODOS DE NAVEGACIÓN ---
     	
     	private void manejarBusqueda() {
