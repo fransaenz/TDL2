@@ -103,39 +103,38 @@ public class PeliculaDAOjdbc implements PeliculaDAO{
 	    return null;
 	}
 	
-	public ArrayList<Pelicula> getTop10() throws SQLException {
+	
+	public ArrayList<Pelicula> getTop10() {
 
 	    ArrayList<Pelicula> top10 = new ArrayList<>();
 
-	    String sql = """
-	        SELECT *
-	        FROM pelicula
-	        ORDER BY rating_promedio DESC
-	        LIMIT 10
-	    """;
+	    String SQL = "SELECT * FROM PELICULA ORDER BY ESTRELLAS_PROMEDIO DESC LIMIT 10";
 
-	    try (Connection conn = ConexionBD.getConexion();
-	         PreparedStatement stmt = conn.prepareStatement(sql);
-	         ResultSet rs = stmt.executeQuery()) {
-
-	        while (rs.next()) {
-
-	            Pelicula pelicula = new Pelicula(
-	                rs.getString("titulo"),
-	                rs.getInt("duracion"),
-	                rs.getDouble("rating_promedio")
-	                // agregá acá el resto si tu constructor lo pide
-	            );
-
-	            // si algunos campos no van por constructor:
-	            // pelicula.setGenero(...)
-	            // pelicula.setIdioma(...)
-	            // pelicula.setPais(...)
-
-	            top10.add(pelicula);
-	        }
-	    }
-
-	    return top10;
+	    try (Statement stmt = conexion.createStatement();
+				 ResultSet resul = stmt.executeQuery(SQL))
+			{
+				Pelicula pelicula;
+				
+				while(resul.next()) {
+					
+					pelicula = new Pelicula(
+							resul.getInt("ANIO"),
+							resul.getString("TITULO"),
+							resul.getString("RESUMEN"),
+							resul.getFloat("ESTRELLAS_PROMEDIO"),
+							Genero.valueOf(resul.getString("GENERO").toUpperCase()),
+	        				resul.getString("POSTER")
+	            			);
+					
+					pelicula.setId(resul.getInt("ID"));
+					top10.add(pelicula);
+				}
+			
+			} catch (SQLException e) {
+				System.err.println("❌ Error al obtener Top 10 de peliculas: " + e.getMessage());
+			}
+		
+		return top10;
 	}
+
 }
