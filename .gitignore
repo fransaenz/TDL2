@@ -1,1 +1,9 @@
+# Carpetas generadas
 Plataforma_de_Streaming/bin/
+
+# Bases de datos
+*.db
+
+# Archivos temporales
+*.log
+*.tmp

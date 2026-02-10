@@ -104,37 +104,6 @@ public class PeliculaDAOjdbc implements PeliculaDAO{
 	}
 	
 	
-	public ArrayList<Pelicula> getTop10() {
-
-	    ArrayList<Pelicula> top10 = new ArrayList<>();
-
-	    String SQL = "SELECT * FROM PELICULA ORDER BY ESTRELLAS_PROMEDIO DESC LIMIT 10";
-
-	    try (Statement stmt = conexion.createStatement();
-				 ResultSet resul = stmt.executeQuery(SQL))
-			{
-				Pelicula pelicula;
-				
-				while(resul.next()) {
-					
-					pelicula = new Pelicula(
-							resul.getInt("ANIO"),
-							resul.getString("TITULO"),
-							resul.getString("RESUMEN"),
-							resul.getFloat("ESTRELLAS_PROMEDIO"),
-							Genero.valueOf(resul.getString("GENERO").toUpperCase()),
-	        				resul.getString("POSTER")
-	            			);
-					
-					pelicula.setId(resul.getInt("ID"));
-					top10.add(pelicula);
-				}
-			
-			} catch (SQLException e) {
-				System.err.println("❌ Error al obtener Top 10 de peliculas: " + e.getMessage());
-			}
-		
-		return top10;
-	}
+	
 
 }

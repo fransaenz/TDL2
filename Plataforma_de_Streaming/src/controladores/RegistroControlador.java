@@ -15,6 +15,7 @@ import excepciones.CamposVaciosException;
 import excepciones.DNIDuplicadoException;
 import excepciones.DatosInvalidosException;
 import excepciones.EmailInvalidoException;
+import excepciones.EmailDuplicadoException;
 import modelo.perfiles.*;
 
 public class RegistroControlador {
@@ -33,7 +34,7 @@ public class RegistroControlador {
     
     
     private void inicializarEventos() {
-        // Evento para el botón Registrar (Clase Anónima)
+        // Evento para el botón Registrar
         this.vista.addRegistroListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,7 +42,7 @@ public class RegistroControlador {
             }
         });
 
-        // Evento para el botón Volver (Clase Anónima)
+        // Evento para el botón Volver
         this.vista.addVolverListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,11 +73,11 @@ public class RegistroControlador {
             }
 
             if (!soloLetras(nombre)) {
-                throw new DatosInvalidosException("El nombre no puede contener números.");
+                throw new DatosInvalidosException("El nombre no puede contener números ni caracteres especiales.");
             }
 
             if (!soloLetras(apellido)) {
-                throw new DatosInvalidosException("El apellido no puede contener números.");
+                throw new DatosInvalidosException("El apellido no puede contener números ni caracteres especiales.");
             }
             
             if (!esNumerico(dniStr) || dniStr.length() < 7 || dniStr.length() > 8) {
@@ -101,11 +102,15 @@ public class RegistroControlador {
                 throw new EmailInvalidoException();
             }
 
+            if (u.existeEmail(email)) {
+                throw new EmailDuplicadoException();
+            }
+            
             // PEDIMOS AL CONTROLADOR QUE REGISTRE
             boolean exito = registrarUsuario(email, usuario, pass,
                     nombre, apellido, dni, nroTarjeta);
             
-            if (exito) { //Resolvi el error sacanco el !, no se si esta bien esta idea. 
+            if (!exito) { 
                 throw new Exception("Error al registrar el nuevo usuario.");
             }
 
@@ -124,6 +129,8 @@ public class RegistroControlador {
     	    vista.mostrarError(eTres.getMessage());
     	} catch (DNIDuplicadoException eCuatro) {
     	    vista.mostrarError(eCuatro.getMessage());
+    	} catch (EmailDuplicadoException eCinco) {
+    	    vista.mostrarError(eCinco.getMessage());
         } catch (Exception ex) {
         	vista.mostrarError(ex.getMessage());
         }
@@ -179,11 +186,16 @@ public class RegistroControlador {
     }
     
     public static boolean soloLetras(String texto) {
+        if (texto == null || texto.isEmpty()) {
+            return false;
+        }
+
         for (int i = 0; i < texto.length(); i++) {
-            if (Character.isDigit(texto.charAt(i))) {
-                return false; // encontró un número
+            char c = texto.charAt(i);
+            if (!Character.isLetter(c) && c != ' ') {
+                return false;
             }
         }
-        return true; // no encontró ningún número
+        return true;
     }
 }

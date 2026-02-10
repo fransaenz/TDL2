@@ -92,4 +92,22 @@ public class UsuarioDAOjdbc implements UsuarioDAO{
 	    return null;
 	}
 	
+	
+	
+	
+	public boolean existeEmail(String email) {
+		String SQL = "SELECT * FROM USUARIO WHERE EMAIL = ?";
+		try (PreparedStatement p_stmt = conexion.prepareStatement(SQL))
+		{
+			p_stmt.setString(1, email);
+			try (ResultSet resul = p_stmt.executeQuery())
+			{
+					return resul.next();
+			}
+		} catch (SQLException e) {
+			System.err.println("❌ Error al verificar si existe el Email: " + e.getMessage());
+			return false;
+		}
+	}
+	
 }

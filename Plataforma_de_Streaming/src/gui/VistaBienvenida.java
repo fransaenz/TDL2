@@ -15,13 +15,14 @@ public class VistaBienvenida extends JFrame {
 
     private CardLayout cardLayout = new CardLayout();
     private JPanel pnlPrincipal = new JPanel(cardLayout);
-
+    private JPanel pnlGridPeliculas;
+    
     // Componentes de la Vista de Contenido
     private JLabel lblUsuario = new JLabel("Usuario");
     private JButton btnCerrarSesion = new JButton("Cerrar Sesión");
     private JTextField txtBuscar = new JTextField();
     private JButton btnBuscar = new JButton("Buscar");
-    private JComboBox<Genero> comboGeneros = new JComboBox<>(Genero.values());
+    private JComboBox<Object> comboGeneros = new JComboBox<>();
     private List<JButton> botonesReseniar = new ArrayList<>();
     private List<Pelicula> top10 = new ArrayList<>();
 
@@ -41,27 +42,31 @@ public class VistaBienvenida extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // 1. Crear Pantalla de Carga
+        //Creo Pantalla de Carga
         pnlPrincipal.add(crearPanelCarga(), "CARGA");
 
-        // 2. Crear Pantalla de Contenido
+        //Creo Pantalla de Contenido
         pnlPrincipal.add(crearPanelContenido(), "CONTENIDO");
 
         add(pnlPrincipal);
         // Por defecto mostramos carga
         cardLayout.show(pnlPrincipal, "CARGA");
-        //cardLayout.show(pnlPrincipal, "CONTENIDO");
+
+        comboGeneros.addItem("GENERAL"); // La opción String
+        for (Genero g : Genero.values()) {
+            comboGeneros.addItem(g);     // Las opciones del Enum
+        }
+        
     }
 
     private JPanel crearPanelCarga() {
         JPanel pnlCarga = new JPanel(new GridBagLayout());
-        pnlCarga.setBackground(colorDelFondo);
+        pnlCarga.setBackground(Color.WHITE);
         
         JLabel lblCargando = new JLabel("Cargando...", SwingConstants.CENTER);
-        lblCargando.setFont(fuenteTituloSeccion);
-        
-        // Asumiendo que tienes el gif en recursos
-        JLabel lblGif = new JLabel(new ImageIcon("src/resources/tuerca.gif"));
+        lblCargando.setFont(new Font("Calibri", Font.BOLD, 24));
+   
+        JLabel lblGif = new JLabel(new ImageIcon("src/recursos/Loading.gif"));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; gbc.gridy = 0;
@@ -76,14 +81,14 @@ public class VistaBienvenida extends JFrame {
         JPanel pnlContenido = new JPanel(new BorderLayout());
         pnlContenido.setBackground(colorDelFondo);
 
-        // --- HEADER (Parte de arriba) ---
+        //Parte de arriba
         JPanel pnlHeader = new JPanel(new BorderLayout());
         pnlHeader.setPreferredSize(new Dimension(0, 150));
         pnlHeader.setBackground(colorDelFondo);
 
         // Imagen 3/4
-        JLabel lblBanner = new JLabel(new ImageIcon(new ImageIcon("src/resources/banner.png")
-                .getImage().getScaledInstance(800, 120, Image.SCALE_SMOOTH)));
+        JLabel lblBanner = new JLabel(new ImageIcon(new ImageIcon("src/recursos/NombreApp.jpeg")
+                .getImage().getScaledInstance(400, 80, Image.SCALE_SMOOTH)));
         pnlHeader.add(lblBanner, BorderLayout.WEST);
 
         // Panel Usuario y Buscador (1/4)
@@ -108,20 +113,17 @@ public class VistaBienvenida extends JFrame {
         pnlDerecha.add(pnlFila2);
         pnlHeader.add(pnlDerecha, BorderLayout.EAST);
 
-        // --- CUERPO (Tabla de películas) ---
-        // Usamos un JScrollPane porque 10 filas no entrarán cómodamente
-        JPanel pnlGrid = new JPanel(new GridLayout(11, 1)); // 1 fila nombres + 10 pelis
+        //Tabla de películas
+        pnlGridPeliculas = new JPanel(new GridBagLayout());
+        pnlGridPeliculas.setBackground(colorDelFondo);
         
-        // Fila de encabezados
-        pnlGrid.add(crearFilaEncabezado());
+        // Solo agregamos el encabezado inicialmente
+        pnlGridPeliculas.add(crearFilaEncabezado());
 
-        // Simulamos 10 filas (esto después se llenará con datos reales)
-        for(int i = 0; i < 10; i++) {
-            JPanel fila = crearFilaPelicula(top10.get(i));
-            pnlGrid.add(fila);
-        }
 
-        JScrollPane scroll = new JScrollPane(pnlGrid);
+        JScrollPane scroll = new JScrollPane(pnlGridPeliculas);
+        scroll.getVerticalScrollBar().setUnitIncrement(16); 
+     	scroll.setBorder(null);
         pnlContenido.add(pnlHeader, BorderLayout.NORTH);
         pnlContenido.add(scroll, BorderLayout.CENTER);
 
@@ -129,43 +131,89 @@ public class VistaBienvenida extends JFrame {
     }
 
     private JPanel crearFilaEncabezado() {
-        JPanel pnl = new JPanel(new GridLayout(1, 5));
-        pnl.setBackground(colorDelBoton);
-        String[] nombres = {"Poster", "Título", "Género", "Resumen", "     "};
-        for(String n : nombres) {
-            JLabel lbl = new JLabel(n, SwingConstants.CENTER);
-            lbl.setForeground(colorEtiquetaBoton);
-            lbl.setFont(fuenteTituloSeccion);
-            if(n.equals("Género")) {
-                JPanel p = new JPanel(new FlowLayout());
-                p.setOpaque(false);
-                p.add(lbl); p.add(comboGeneros);
-                pnl.add(p);
-            } else {
-                pnl.add(lbl);
-            }
-        }
+    	JPanel pnl = new JPanel(new GridBagLayout());
+    	pnl.setBackground(colorDelBoton);
+    	GridBagConstraints gbc = new GridBagConstraints();
+    	gbc.fill = GridBagConstraints.BOTH;
+    	gbc.weighty = 1.0;
+
+    	String[] nombres = {"Poster", "Título", "Género", "Resumen", "     "};
+    	double[] pesos = {0.1, 0.2, 0.15, 0.45, 0.1}; 
+
+    	for(int i = 0; i < nombres.length; i++) {
+    	    gbc.weightx = pesos[i];
+    	    JLabel lbl = new JLabel(nombres[i], SwingConstants.CENTER);
+    	    lbl.setForeground(colorEtiquetaBoton);
+    	    lbl.setFont(fuenteTituloSeccion);
+    	    
+    	    if(nombres[i].equals("Género")) {
+    	        JPanel p = new JPanel(new FlowLayout());
+    	        p.setOpaque(false);
+    	        p.add(lbl); p.add(comboGeneros);
+    	        pnl.add(p, gbc);
+    	    } else {
+    	        pnl.add(lbl, gbc);
+    	    }
+    	}
         return pnl;
     }
 
+    
     private JPanel crearFilaPelicula(Pelicula peli) {
-        JPanel pnl = new JPanel(new GridLayout(1, 5));
+        JPanel pnl = new JPanel(new GridBagLayout());
         pnl.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
-
-        pnl.add(new JLabel(new ImageIcon(peli.getPoster()))); // Poster
-        pnl.add(new JLabel(peli.getTitulo(), SwingConstants.CENTER)); // Titulo
-        pnl.add(new JLabel(peli.getGenero().toString(), SwingConstants.CENTER)); // Genero
-        pnl.add(new JLabel(peli.getResumen(), SwingConstants.CENTER)); // Resumen
         pnl.setBackground(colorDelFondo);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5); // Espaciado entre celdas
+        double[] pesos = {0.1, 0.2, 0.15, 0.45, 0.1}; 
+
+        //Poster
+        gbc.weightx = pesos[0];
+        JLabel lblPoster = new JLabel("", SwingConstants.CENTER);
+        lblPoster.setPreferredSize(new Dimension(70, 100));
+
+        lblPoster.setText("<html><center style='color: gray;'>Imagen No<br>Disponible</center></html>");
+        lblPoster.setFont(new Font("Arial", Font.BOLD, 10));
+        lblPoster.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
+        descargarPoster(lblPoster, peli.getPoster());
+
+        pnl.add(lblPoster, gbc);
+        
+        //Título
+        gbc.weightx = pesos[1];
+        pnl.add(new JLabel("<html><body style='width: 120px;'><center>"+peli.getTitulo()+"</center></body></html>", SwingConstants.CENTER), gbc);
+        
+        //Género
+        gbc.weightx = pesos[2];
+        pnl.add(new JLabel(peli.getGenero().toString(), SwingConstants.CENTER), gbc);
+        
+        //Resumen
+        gbc.weightx = pesos[3];
+        JLabel lblResumen = new JLabel("<html><body style='width: 320px; text-align: justify; padding: 5px;'>" 
+                                     + peli.getResumen() + "</body></html>", SwingConstants.CENTER);
+        pnl.add(lblResumen, gbc);
+        
+        //Botón Reseñar
+        gbc.weightx = pesos[4];
+        gbc.fill = GridBagConstraints.NONE; 
+        gbc.anchor = GridBagConstraints.CENTER; 
         
         JButton btnReseniar = new JButton("Reseñar");
+        aplicarEstiloBoton(btnReseniar, 100, 30); 
         btnReseniar.putClientProperty("peliculaAsociada", peli);
-        botonesReseniar.add(btnReseniar);
-        pnl.add(btnReseniar);
+        
+        botonesReseniar.add(btnReseniar); 
+        pnl.add(btnReseniar, gbc);
 
         return pnl;
     }
-
+    
+    
+    
     // Métodos para el Controlador
     public void cambiarAVistaContenido() {
         cardLayout.show(pnlPrincipal, "CONTENIDO");
@@ -179,8 +227,8 @@ public class VistaBienvenida extends JFrame {
     public void addBuscarListener(ActionListener l) { btnBuscar.addActionListener(l); }
     public List<JButton> getBotonesReseniar() { return botonesReseniar; }
     
-    public Genero getGeneroSeleccionado() {
-        return (Genero) comboGeneros.getSelectedItem();
+    public Object getGeneroSeleccionado() {
+        return comboGeneros.getSelectedItem();
     }
 
     public void addFiltroGeneroListener(ActionListener l) {
@@ -220,30 +268,90 @@ public class VistaBienvenida extends JFrame {
 	
 	public void salir() { dispose(); }
 
-    private void aplicarEstiloBoton(JButton boton, int ancho, int alto) {
-        boton.setFont(fuenteTituloSeccion);
-        boton.setBackground(colorDelBoton);
-        boton.setForeground(colorEtiquetaBoton);
-        boton.setBorder(BorderFactory.createEmptyBorder(8, 18, 8, 18));
-        boton.setPreferredSize(new Dimension(ancho, alto));
-        boton.setMargin(new Insets(8, 18, 8, 18));
-        boton.setFocusPainted(false);
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        boton.setEnabled(true);
+	private void aplicarEstiloBoton(JButton boton, int ancho, int alto) {
+	    Dimension dim = new Dimension(ancho, alto);
+	    boton.setFont(fuenteTituloSeccion);
+	    boton.setBackground(colorDelBoton);
+	    boton.setForeground(colorEtiquetaBoton);
+	    boton.setBorder(BorderFactory.createLineBorder(colorEtiquetaBoton, 1));
+
+	    boton.setPreferredSize(dim);
+	    boton.setMinimumSize(dim);
+	    boton.setMaximumSize(dim);
+	    
+	    boton.setFocusPainted(false);
+	    boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+    public void actualizarTablaPeliculas(List<Pelicula> peliculas) {
+        this.top10 = peliculas;
+        botonesReseniar.clear();
+        pnlGridPeliculas.removeAll();
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
+        // Encabezado
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pnlGridPeliculas.add(crearFilaEncabezado(), gbc);
+        // Filas
+        for (Pelicula peli : peliculas) {
+            gbc.gridy++;
+            pnlGridPeliculas.add(crearFilaPelicula(peli), gbc);
+        }
+
+        gbc.gridy++;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        JPanel pnlEspaciador = new JPanel();
+        pnlEspaciador.setOpaque(false);
+        pnlGridPeliculas.add(pnlEspaciador, gbc);
+
+        pnlGridPeliculas.revalidate();
+        pnlGridPeliculas.repaint();
     }
 
+private void descargarPoster(JLabel lblPoster, String urlPoster) {
 
-public static void main(String[] args) {
+    if (urlPoster == null || urlPoster.isEmpty() || urlPoster.equalsIgnoreCase("N/A")) {
+        return; // queda el texto "Imagen no disponible"
+    }
 
-    // Asegura que Swing se ejecute en el Event Dispatch Thread
-    SwingUtilities.invokeLater(new Runnable() {
-        @Override
-        public void run() {
+    Thread hilo = new Thread(() -> {
+        try {
+            java.net.URL url = new java.net.URI(urlPoster.trim()).toURL();
+            java.net.HttpURLConnection conn =
+                    (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
 
-            VistaBienvenida vista = new VistaBienvenida();
+            java.io.InputStream is = conn.getInputStream();
+            java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(is);
 
-            vista.setVisible(true);
+            if (img != null) {
+                Image escalada = img.getScaledInstance(60, 90, Image.SCALE_SMOOTH);
+                ImageIcon icono = new ImageIcon(escalada);
+
+                SwingUtilities.invokeLater(() -> {
+                    lblPoster.setText("");
+                    lblPoster.setBorder(null);
+                    lblPoster.setIcon(icono);
+                });
+            }
+
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar poster: " + urlPoster);
         }
     });
+
+    hilo.setDaemon(true);
+    hilo.start();
 }
+
+
 }

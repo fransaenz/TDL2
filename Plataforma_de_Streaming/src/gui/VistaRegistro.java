@@ -54,12 +54,12 @@ public class VistaRegistro extends JFrame {
         contentPane.setBackground(colorDelFondo);
         setContentPane(contentPane);
 
-        // ================= BARRA SUPERIOR =================
+        //BARRA SUPERIOR
         JPanel pnlSuperior = new JPanel(new BorderLayout());
         pnlSuperior.setBackground(colorDelFondo);
         pnlSuperior.setBorder(new EmptyBorder(20, 30, 10, 30));
 
-        // ---- BOTÓN VOLVER (izquierda) ----
+        //BOTÓN VOLVER (izquierda)
         btnVolver.setFont(fuenteTituloSeccion);
         btnVolver.setBackground(colorDelBoton);
         btnVolver.setForeground(colorEtiquetaBoton);
@@ -73,11 +73,11 @@ public class VistaRegistro extends JFrame {
         
         pnlSuperior.add(btnVolver, BorderLayout.WEST);
 
-        // ---- LOGO (espacio reservado) ----
+        //LOGO (espacio reservado)
         JPanel pnlLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlLogo.setBackground(colorDelFondo);
 
-        ImageIcon logoApp = new ImageIcon("src/resources/LogoAppHorizontal.png"); //Fluxer
+        ImageIcon logoApp = new ImageIcon("src/recursos/NombreApp.jpeg"); //Fluxer
         Image logoEscalado = logoApp.getImage().getScaledInstance(280, 70, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(new ImageIcon(logoEscalado));
 
@@ -94,12 +94,18 @@ public class VistaRegistro extends JFrame {
         pnlImagen.setBackground(colorDelFondo);
     	pnlImagen.setPreferredSize(new Dimension(400, 0));
         
-    	ImageIcon imagen = new ImageIcon("src/resources/Logo Popcorn Caricatura.png"); // fran lagarto
-    	Image imagenEscalada = imagen.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH); // Escala la imagen
+    	
+    	
+    	ImageIcon imagen = new ImageIcon("src/recursos/Lagarto.png"); // lagarto
+    	Image imagenEscalada = imagen.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH); // Escala la imagen
     	
     	JLabel lblImagen = new JLabel(new ImageIcon(imagenEscalada));
     	lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
         
+    	//Levanto la imagen para que este mas "centrada"
+    	lblImagen.setBorder(BorderFactory.createEmptyBorder(-90, 0, 0, 0));
+    	
+    	pnlImagen.add(lblImagen);
         
         JPanel pnlCentro = new JPanel(new GridBagLayout());
         pnlCentro.setBackground(colorDelFondo);
@@ -243,7 +249,7 @@ public class VistaRegistro extends JFrame {
         txtEmail.setText(email);
     }
 
-    // --- PASSWORD ---
+    //PASSWORD
     public String getCampoPassword() {
         return new String(txtPassword.getPassword()).trim();
     }
@@ -252,7 +258,7 @@ public class VistaRegistro extends JFrame {
         txtPassword.setText(password);
     }
 
-    // --- NOMBRE ---
+    //NOMBRE
     public String getCampoNombre() {
         return txtNombre.getText().trim();
     }
@@ -261,7 +267,7 @@ public class VistaRegistro extends JFrame {
         txtNombre.setText(nombre);
     }
 
-    // --- APELLIDO ---
+    //APELLIDO
     public String getCampoApellido() {
         return txtApellido.getText().trim();
     }
@@ -270,7 +276,7 @@ public class VistaRegistro extends JFrame {
         txtApellido.setText(apellido);
     }
 
-    // --- DNI ---
+    //DNI
     public String getCampoDni() {
         return txtDni.getText().trim();
     }
@@ -279,7 +285,7 @@ public class VistaRegistro extends JFrame {
         txtDni.setText(dni);
     }
 
-    // --- NRO TARJETA (Si lo usas) ---
+    //NRO TARJETA
     public String getCampoNroTarjeta() {
         return txtNroTarjeta.getText().trim();
     }
@@ -288,7 +294,7 @@ public class VistaRegistro extends JFrame {
         txtNroTarjeta.setText(nroTarjeta);
     }
 
- // --- NOMBRE DE USUARIO ---
+   //NOMBRE DE USUARIO
     public String getCampoUsuario() {
         return txtUsuario.getText().trim();
     }

@@ -9,4 +9,5 @@ public interface UsuarioDAO {
 	int insertar(Usuario usuario); //use
 	List<Usuario> listarUsuarios(); //use
 	Usuario buscarPorId(int id); //use
+	boolean existeEmail(String email);//use
 }

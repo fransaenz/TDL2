@@ -34,7 +34,7 @@ public class VistaLogin extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
     	
-    	setLayout(new BorderLayout()); // Divide en 5 zonas
+    	setLayout(new BorderLayout()); 
     	setBackground(colorDelFondo);	// Pone el color del fondo
     	
     	
@@ -57,7 +57,7 @@ public class VistaLogin extends JFrame {
     	txtPassword.setPreferredSize(new Dimension(200, 30));
     	
     	//Nombre de la app
-    	ImageIcon iconoHeader = new ImageIcon("src/resources/header.png");
+    	ImageIcon iconoHeader = new ImageIcon("src/recursos/NombreApp.jpeg");
     	Image imgHeader = iconoHeader.getImage().getScaledInstance(300, 80, Image.SCALE_SMOOTH);
     	JLabel lblImagenHeader = new JLabel(new ImageIcon(imgHeader));
     	lblImagenHeader.setHorizontalAlignment(SwingConstants.CENTER);
@@ -111,8 +111,6 @@ public class VistaLogin extends JFrame {
     	gbc.weightx = 1.0;
     	//Agrego el campo del Passwd
     	pnlCentro.add(txtPassword, gbc);
-    	
-    	//------------------------------------
     	
     	
     	//Panel de botones
@@ -171,7 +169,6 @@ public class VistaLogin extends JFrame {
     	// Agrego al layout principal
     	add(pnlCentro, BorderLayout.CENTER);
     	
-    	//------------------------------------
     	
     	
     	// Panel de la imagen, lado derecho
@@ -179,8 +176,8 @@ public class VistaLogin extends JFrame {
     	pnlImagen.setBackground(colorDelFondo);
     	pnlImagen.setPreferredSize(new Dimension(400, 0));
     
-    	ImageIcon imagen = new ImageIcon("src/resources/Logo Popcorn Caricatura.png"); // Carga la imagen
-    	Image imagenEscalada = imagen.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH); // Escala la imagen
+    	ImageIcon imagen = new ImageIcon("src/recursos/Lagarto.png"); // Carga la imagen
+    	Image imagenEscalada = imagen.getImage().getScaledInstance(450, 450, Image.SCALE_SMOOTH); // Escala la imagen
     	
     	JLabel lblImagen = new JLabel(new ImageIcon(imagenEscalada));
     	lblImagen.setHorizontalAlignment(SwingConstants.CENTER);

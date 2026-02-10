@@ -33,6 +33,8 @@ public class ImportadorPeliculas implements Runnable{
 	
 	public static void importarCSV(String rutaCsv) throws FileNotFoundException, IOException {
 		
+		if (peliculasEnMemoria.isEmpty()) {
+		
 		peliculasEnMemoria.clear();
 		
 		List<String> errores = new ArrayList<>();
@@ -104,6 +106,7 @@ public class ImportadorPeliculas implements Runnable{
 	        errores.forEach(System.out::println);
 	    }
 	}
+}
 
 	private static List<String> splitearLineaCSV(String linea) {
 	    List<String> campos = new ArrayList<>();
@@ -192,5 +195,27 @@ public class ImportadorPeliculas implements Runnable{
 	    return new ArrayList<>(peliculasEnMemoria.subList(0, 10));
 	}
 
+	public static List<Pelicula> filtrarPorGenero(Genero genero) {
+
+	    List<Pelicula> filtradas = new ArrayList<>();
+
+	    for (Pelicula p : peliculasEnMemoria) {
+	        if (p.getGenero() == genero) {
+	            filtradas.add(p);
+	        }
+	    }
+	    //la lista ya esta ordenada por rating descendiente por ende directamente devuelvo el top10
+	    
+	    if (filtradas.size() <= 10)
+	        return filtradas;
+
+	    return new ArrayList<>(filtradas.subList(0, 10));
+	}
+
+	public static List<Pelicula> getPeliculasenmemoria() {
+		return peliculasEnMemoria;
+	}
+	
+	
 }
 

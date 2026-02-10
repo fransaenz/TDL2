@@ -38,7 +38,7 @@ public class Usuario extends Perfil {
 	*/
 	public Usuario(String email, String contrasena, String nombreUsuario) {
 		super(email, contrasena, nombreUsuario);
-		this.misResenas = null;
+		this.misResenas = new LinkedList<Resena>();
 	}
 	
 	
@@ -118,7 +118,7 @@ public class Usuario extends Perfil {
 	}
 	
 	public void agregarResena(Resena res) {
-	    if (misResenas == null) misResenas = new LinkedList<Resena>();
+	    
 	    misResenas.addLast(res);
 	}
 	

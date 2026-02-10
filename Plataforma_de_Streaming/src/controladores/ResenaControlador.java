@@ -24,10 +24,10 @@ public class ResenaControlador {
         this.pelicula = pelicula;
         this.usu = usu;
 
-        // 1. Mandamos el título a la vista apenas inicia
+        // Mandamos el título a la vista apenas inicia
         this.vista.setTitulo(this.pelicula.getTitulo());
 
-        // 2. Activamos el escuchador del botón
+        //Activamos el escuchador del botón
         this.inicializarEventos();
     }
 
@@ -77,13 +77,14 @@ public class ResenaControlador {
 
             Resena res = new Resena(this.pelicula, this.usu, estrellas, comentario);
 
+            usu.agregarResena(res);
             //Insertamos en la base de datos a través del DAO
             r.insertar(res);
             
             System.out.println("Reseña insertada con éxito en la BD para: " + pelicula.getTitulo());
 
         } catch (Exception e) {
-            // Si el DAO falla (ej. error de conexión), lanzamos la excepción hacia el controlador
+            // Si el DAO falla, lanzamos la excepción hacia el controlador
             throw new Exception("Error al guardar en la base de datos: " + e.getMessage());
         }
     	

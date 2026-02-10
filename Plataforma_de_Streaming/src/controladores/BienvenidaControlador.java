@@ -1,40 +1,33 @@
-
-
-
-
 package controladores;
 
 import gui.*;
 import modelo.perfiles.Usuario;
+import modelo.resenas.Resena;
 import modelo.audiovisuales.util.Genero;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import servicios.ServicioBusqueda;
 
 import modelo.audiovisuales.*;
 import javax.swing.JButton;
-
-import daos.jdbc.PeliculaDAOjdbc;
 import excepciones.*;
 
 public class BienvenidaControlador {
 
     private VistaBienvenida vista;
     private Usuario usu;
-    private PeliculaDAOjdbc p = new PeliculaDAOjdbc();
-    private List<Pelicula> topDiez = new ArrayList<>();
     private ServicioBusqueda servicioBusqueda;
+    private List<Pelicula> top10 = new ArrayList<>();
+
 
     public BienvenidaControlador(VistaBienvenida vista, Usuario usuario) {
         this.vista = vista;
         this.usu = usuario;
         this.vista.setNombreUsuario(usu.getNombreUsuario());
         inicializarEventos();
-
-        iniciarCargaDatos();
+        iniciarCargaDatos();        
     }
 
     private void inicializarEventos() {
@@ -43,7 +36,7 @@ public class BienvenidaControlador {
     	this.vista.addBuscarListener(new ActionListener() {
     	    @Override
     	    public void actionPerformed(ActionEvent e) {
-    	        // Llamamos al método que contiene el try-catch
+    	        // Llamamos al método
     	        manejarBusqueda();
     	    }
     	});
@@ -56,30 +49,21 @@ public class BienvenidaControlador {
             }
         });
 
-        // CAMBIO DE GÉNERO (JComboBox)
         this.vista.addFiltroGeneroListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Obtenemos el género seleccionado a través de la vista
-                Genero seleccionado = vista.getGeneroSeleccionado();
-                actualizarTop10PorGenero(seleccionado);
+                Object seleccionado = vista.getGeneroSeleccionado();
+
+                if (seleccionado instanceof Genero) {
+                    // Si es un género real, filtramos normalmente
+                    actualizarTop10PorGenero((Genero) seleccionado);
+                } else if ("GENERAL".equals(seleccionado)) {
+                	vista.setTop10(top10);
+                }
             }
         });
-
-        // BOTONES DE RESEÑAR (Lista de botones)
-        for (final JButton btn : vista.getBotonesReseniar()) {
-            btn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Recuperamos la película que le pegamos al botón en la vista
-                    Pelicula peliSeleccionada = (Pelicula) btn.getClientProperty("peliculaAsociada");
-                    
-                    // Se la pasamos al método
-                    abrirResena(peliSeleccionada);
-                }
-            });
         }
-    }
+    
     private void iniciarCargaDatos() {
 
         // Mostrar pantalla de carga
@@ -87,58 +71,55 @@ public class BienvenidaControlador {
 
         ImportadorPeliculas importador = new ImportadorPeliculas();
 
-        Thread hiloCarga = new Thread(() -> {
+        Thread hiloImportacion = new Thread(importador, "HiloImportacionPeliculas");
+
+        Thread hiloCoordinador = new Thread(() -> {
             try {
-                // 1. Importar CSV → BD
-                importador.run();   // o importador.importar()
 
-                // 2. Obtener top 10
-                List<Pelicula> top10 = p.getTop10();
+                hiloImportacion.start();
 
-                // 3. Volver a la EDT
+                hiloImportacion.join();
+
+                top10 = ImportadorPeliculas.obtenerTop10();
+
                 javax.swing.SwingUtilities.invokeLater(() -> {
-                    vista.setTop10(top10);
+                	
+                    vista.actualizarTablaPeliculas(top10);
+                    vincularEventosBotonesReseniar();
+                    this.servicioBusqueda = new ServicioBusqueda(ImportadorPeliculas.getPeliculasenmemoria());
                     vista.cambiarAVistaContenido();
                 });
 
-            } catch (Exception e) {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    vista.mostrarError("Error al cargar las películas");
-                });
+            } catch (InterruptedException e) {
+                javax.swing.SwingUtilities.invokeLater(() ->
+                    vista.mostrarError("La carga de películas fue interrumpida")
+                );
             }
-        });
+        }, "HiloCoordinador");
 
-        hiloCarga.start();
+        hiloCoordinador.start();
     }
 
-    
-    
-   /* private void iniciarCargaDatos() {
-        // Hilo para no congelar la GUI durante la carga
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Aquí iría tu lógica de: obtenerTop10();
-                    Thread.sleep(2000); // Simulación de carga
-                    
-                    // Una vez cargado, mostramos el contenido
-                    vista.cambiarAVistaContenido();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+    private void vincularEventosBotonesReseniar() {
+        for (final JButton btn : vista.getBotonesReseniar()) {
+            
+            // Quitamos listeners previos por si acaso para no duplicar
+            for (ActionListener al : btn.getActionListeners()) {
+                btn.removeActionListener(al);
             }
-        }).start();
-        
-        this.servicioBusqueda = new ServicioBusqueda(p.listarPeliculas());
-        try {
-            this.vista.setTop10(p.getTop10());
-        } catch (SQLException e) {
-            vista.mostrarError("Error al cargar las películas");
+            
+
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Obtenemos el objeto Pelicula que adjuntamos al botón en la Vista
+                    Pelicula peliSeleccionada = (Pelicula) btn.getClientProperty("peliculaAsociada");
+                    abrirResena(peliSeleccionada);
+                }
+            });
         }
     }
-*/
-    // --- MÉTODOS DE NAVEGACIÓN ---
+
     	
     	private void manejarBusqueda() {
     	    try {
@@ -167,15 +148,31 @@ public class BienvenidaControlador {
     	        vista.mostrarError(ex.getMessage());
     	    }
     	}
+  
     
-
     private void abrirResena(Pelicula peli) {
-        VistaResena vistaRes = new VistaResena();
-        new ResenaControlador(vistaRes, peli, usu);
-        vistaRes.setVisible(true);
-        // No cierro la principal porque quiero que la reseña sea una ventana aparte
+        try {
+        	if(!(usu.getMisResenas().isEmpty())) {
+        		for (Resena r : usu.getMisResenas()) {
+        			if (r.getContenidoResenado().getId() == peli.getId()) {
+        				throw new Exception("Opcion desactivada");
+        			}
+        		}
+        	}
+            VistaResena vistaRes = new VistaResena();
+            new ResenaControlador(vistaRes, peli, usu);
+            vistaRes.setVisible(true);
+            // No cierro la principal porque quiero que la reseña sea una ventana aparte
+            
+        } catch (Exception ex) {
+        	vista.mostrarError(ex.getMessage());
+        }
     }
-
+    
+  
+    
+    
+    
     private void volverAlLogin() {
         VistaLogin vLogin = new VistaLogin();
         new LoginControlador(vLogin);
@@ -185,7 +182,9 @@ public class BienvenidaControlador {
 
     private void actualizarTop10PorGenero(Genero g) {
         System.out.println("El controlador recibió el género: " + g);
-        // Tu lógica para recargar la lista de películas...
+        List<Pelicula> topDiezGenero = ImportadorPeliculas.filtrarPorGenero(g);
+        vista.actualizarTablaPeliculas(topDiezGenero);
+        vincularEventosBotonesReseniar();
     }
     
     
